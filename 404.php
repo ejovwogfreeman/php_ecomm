@@ -1,8 +1,7 @@
 <?php
-// session_start();
-include('admincheck.php');
-include('../config/db.php');
-include('../partials/header.php');
+session_start();
+include('./config/db.php');
+include('./partials/header.php');
 
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'][0];
@@ -20,10 +19,8 @@ if (isset($_SESSION['user'])) {
         </div>
     <?php endif ?>
     <div class="mt-3">
-        <?php if (isset($_SESSION['user'])) :  ?>
-            <h3>Welcome <?php echo $username ?>!</h3>
-        <?php endif ?>
+        <h3>404 page not found.</h3>
     </div>
 </div>
 
-<?php include('../partials/footer.php'); ?>
+<?php include('./partials/footer.php'); ?>

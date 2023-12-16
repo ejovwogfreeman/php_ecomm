@@ -2,10 +2,10 @@
 
 // session_start();
 
-// function getCartItemCount()
-// {
-//     return isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
-// }
+function getCartItemCount()
+{
+    return isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+}
 
 ?>
 
@@ -26,9 +26,6 @@
             <a href='index.php' class='text-decoration-none'>
                 <h2 class='m-0 p-0 text-light'>PhP_Ecomm</h2>
             </a>
-            <!-- <a href='cart.php' class="text-light text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: 0px; right: -10px; background: red; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"><?
-                                                                                                                                                                                                                                                                                                                                                    // php echo getCartItemCount(); 
-                                                                                                                                                                                                                                                                                                                                                    ?></span></a> -->
-            <a href='cart.php' class="text-light text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: 0px; right: -10px; background: red; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"></span></a>
+            <a href='/php_ecomm/cart.php' class="text-light text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: 0px; right: -10px; background: red; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"><?php echo getCartItemCount(); ?></span></a>
         </div>
     </nav>
