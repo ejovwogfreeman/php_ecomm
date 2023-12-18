@@ -23,9 +23,19 @@ function getCartItemCount()
 <body>
     <nav class='py-3 border-bottom bg-primary'>
         <div class="container d-flex align-items-center justify-content-between">
-            <a href='index.php' class='text-decoration-none'>
+            <a href='/php_ecomm/index.php' class='text-decoration-none'>
                 <h2 class='m-0 p-0 text-light'>PhP_Ecomm</h2>
             </a>
-            <a href='/php_ecomm/cart.php' class="text-light text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: 0px; right: -10px; background: red; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"><?php echo getCartItemCount(); ?></span></a>
+            <div class="d-flex align-items-center justify-content-between">
+                <?php if (isset($_SESSION['user'])) : ?>
+                    <a href="dashboard.php" class="text-light text-decoration-none me-3">Dashboard</a>
+                    <a href="logout.php" class="text-light text-decoration-none me-3">Logout</a>
+                    <a href='/php_ecomm/cart.php' class="text-light text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: 0px; right: -10px; background: red; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"><?php echo getCartItemCount(); ?></span></a>
+                <?php else : ?>
+                    <a href="register.php" class="text-light text-decoration-none me-3">Register</a>
+                    <a href="login.php" class="text-light text-decoration-none me-3">Login</a>
+                    <a href='/php_ecomm/cart.php' class="text-light text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: 0px; right: -10px; background: red; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"><?php echo getCartItemCount(); ?></span></a>
+                <?php endif ?>
+            </div>
         </div>
     </nav>

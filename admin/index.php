@@ -21,7 +21,7 @@ if (isset($_SESSION['user'])) {
     <?php endif ?>
     <div class="mt-3">
         <?php if (isset($_SESSION['user'])) :  ?>
-            <h3>Welcome <?php echo $username ?>!</h3>
+            <h3>Welcome <?php echo $username ?> (admin pannel)!</h3>
         <?php endif ?>
     </div>
 </div>
