@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 include('./config/db.php');
 include('./partials/header.php');
 

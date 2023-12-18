@@ -27,7 +27,7 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
         <a href="cart.php" class="btn btn-primary">VIEW CART</a>
     </div>
 
-    <?php if (isset($_GET['message']) && (strstr($_GET['message'], "successfully"))) : ?>
+    <?php if (isset($_GET['message']) && (strstr($_GET['message'], "successfully"))  || (isset($_GET['message']) && (strstr($_GET['message'], "SUCCESSFUL")))) : ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong><?php echo $_GET['message'] ?></strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
@@ -48,7 +48,7 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
             <?php foreach ($products as $product) : ?>
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <a href=<?php echo "product.php?id={$product['product_id']}" ?>>
+                        <a href=<?php echo "product.php?id={$product['product_id']}" ?> class="text-decoration-none text-dark">
                             <?php
                             $imageData = $product['image'];
                             $imageInfo = getimagesizefromstring($imageData);
