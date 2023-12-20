@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<div class="container">
+<div class="container" style="margin-top: 100px;">
     <form action='' class='border rounded p-3 mt-5 m-auto' style='width: 60%' method='POST'>
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">

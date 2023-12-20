@@ -28,13 +28,13 @@ $product = mysqli_fetch_all($sql_query, MYSQLI_ASSOC)[0];
                 echo "Unable to determine image type.";
             }
             ?>
-            <img class="border" src="<?php echo $img_src ?>" alt="<?php echo $product['name'] ?>" style="height: 500px; width: 500px; object-fit: cover">
+            <img class="border rounded" src="<?php echo $img_src ?>" alt="<?php echo $product['name'] ?>" style="height: 500px; width: 500px; object-fit: cover">
             <div class="ms-3 d-flex flex-column justify-content-between">
                 <h3 class="card-title"><?php echo $product['name'] ?></h3>
                 <P class="my-5"><?php echo $product['description'] ?></P>
                 <div class=" d-flex align-items-center justify-content-between">
                     <h4 class="card-text me-5">NGN <?php echo $product['price'] ?></h4>
-                    <a href=<?php echo "remove_from_cart.php?id={$product['product_id']}" ?> class="btn btn-primary">ADD TO CART</a>
+                    <a href=<?php echo "add_to_cart.php?id={$product['product_id']}" ?> class="btn btn-primary">ADD TO CART</a>
                 </div>
             </div>
         </div>

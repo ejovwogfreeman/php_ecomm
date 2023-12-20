@@ -17,7 +17,7 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
 
 ?>
 
-<div class="container">
+<div class="container" style="margin-top: 100px;">
     <div class="d-flex align-items-center justify-content-between my-3">
         <div class="mt-3">
             <?php if (isset($_SESSION['user'])) :  ?>
