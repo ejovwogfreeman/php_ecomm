@@ -54,5 +54,5 @@ This eCommerce website provides a platform for users to conveniently browse and 
 **Clone the repository:**
 
 ```bash
-git clone https://github.com/yourusername/ecommerce-website.git
+git clone https://github.com/ejovwogfreeman/php_ecommerce.git
 ```
