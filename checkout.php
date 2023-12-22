@@ -19,7 +19,7 @@ if (!empty($cartProducts)) {
         $result = mysqli_query($conn, $sql);
         $product = mysqli_fetch_assoc($result);
 
-        $totalPrice += $quantity * $product['price'];
+        $totalPrice += $quantity * $product['product_price'];
     }
 
     $productIds = array_keys($cartProducts);
@@ -47,7 +47,7 @@ if (!empty($cartProducts)) {
         <h3 class="m-0">Proceed To Checkout</h3>
     </div>
 
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-lg-flex align-items-center justify-content-between">
         <form style="flex: 1;" class="border rounded shadow p-3" action="checkout.php" method="POST">
             <?php if ($Err) : ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -57,14 +57,14 @@ if (!empty($cartProducts)) {
                     </button>
                 </div>
             <?php endif ?>
-            <h5 class="text-center">Enter Your shipping Address</h5>
-            <div class="mb-3">
+            <h5 class="text-center mt-2">Enter Your shipping Address</h5>
+            <div class="my-3">
                 <label for="shippingAddress" class="form-label">Address/Location</label>
                 <input type="text" class="form-control" id="shippingAddress" name="shippingAddress" value="<?php echo $shippingAddress ?>">
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%">CHECKOUT</button>
         </form>
-        <div style="flex: 2;" class="border rounded ms-3 p-3">
+        <div style="flex: 2;" class="border rounded ms-lg-3 mt-lg-0 mt-3 p-3">
             <?php if (!empty($products)) : ?>
                 <table class="table text-center">
                     <thead>
@@ -79,17 +79,17 @@ if (!empty($cartProducts)) {
                         <tbody>
                             <tr>
                                 <th scope="row"><?php echo $counter++; ?></th>
-                                <td><?php echo $product['name'] ?></td>
+                                <td><?php echo $product['product_name'] ?></td>
                                 <td><?php echo $cartProducts[$product['product_id']]; ?></td>
-                                <td><?php echo $product['price'] ?></td>
+                                <td><?php echo number_format($product['product_price']); ?></td>
                             </tr>
                         </tbody>
                     <?php endforeach ?>
                 </table>
                 <div class="border rounded p-3">
-                    <div class="d-flex align-items-center justify-content-between ">
+                    <div class="d-md-flex align-items-center justify-content-between">
                         <h3>Total Items: <?php echo $totalQuantity ?></h3>
-                        <h3>Total Price: <?php echo $totalPrice ?></h3>
+                        <h3>Total Price: NGN <?php echo number_format($totalPrice); ?></h3>
                     </div>
                 </div>
             <?php else : ?>

@@ -8,6 +8,7 @@ function redirectWithMessage($message)
     exit();
 }
 
+
 if (isset($_GET['id'])) {
     $productId = $_GET['id'];
 

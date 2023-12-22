@@ -9,7 +9,7 @@ if (isset($_SESSION['user'])) {
 }
 ?>
 
-<div class="container mt-3">
+<div class="container" style="margin-top: 100px;">
     <?php if ((isset($_SESSION['user'])) && (isset($_GET['message']))) : ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong><?php echo $_GET['message'] ?></strong>

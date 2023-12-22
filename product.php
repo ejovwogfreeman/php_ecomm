@@ -14,28 +14,39 @@ $product = mysqli_fetch_all($sql_query, MYSQLI_ASSOC)[0];
 
 ?>
 
-<div class="container mt-5">
-    <div class="d-flex align-items-center justify-content-between mb-3 pb-3">
-        <div class="d-flex align-items-center justify-content-between">
-            <?php
-            $imageData = $product['image'];
-            $imageInfo = getimagesizefromstring($imageData);
+<style>
+    .img-style {
+        height: 500px;
+        width: 500px;
+        object-fit: cover;
 
-            if ($imageInfo !== false) {
-                $imageFormat = $imageInfo['mime'];
-                $img_src = "data:$imageFormat;base64," . base64_encode($imageData);
-            } else {
-                echo "Unable to determine image type.";
-            }
-            ?>
-            <img class="border rounded" src="<?php echo $img_src ?>" alt="<?php echo $product['name'] ?>" style="height: 500px; width: 500px; object-fit: cover">
-            <div class="ms-3 d-flex flex-column justify-content-between">
-                <h3 class="card-title"><?php echo $product['name'] ?></h3>
-                <P class="my-5"><?php echo $product['description'] ?></P>
-                <div class=" d-flex align-items-center justify-content-between">
-                    <h4 class="card-text me-5">NGN <?php echo $product['price'] ?></h4>
-                    <a href=<?php echo "add_to_cart.php?id={$product['product_id']}" ?> class="btn btn-primary">ADD TO CART</a>
-                </div>
+        @media (max-width: 991px) {
+            width: 100%;
+            height: auto
+        }
+    }
+</style>
+
+<div class="container" style="margin-top: 100px;">
+    <div class="d-lg-flex align-items-center">
+        <?php
+        $imageData = $product['product_image'];
+        $imageInfo = getimagesizefromstring($imageData);
+
+        if ($imageInfo !== false) {
+            $imageFormat = $imageInfo['mime'];
+            $img_src = "data:$imageFormat;base64," . base64_encode($imageData);
+        } else {
+            echo "Unable to determine image type.";
+        }
+        ?>
+        <img class="border rounded img-style" src="<?php echo $img_src ?>" alt="<?php echo $product['product_name'] ?>">
+        <div class="ms-lg-3 mt-lg-0 mt-3 d-flex flex-column justify-content-between">
+            <h3 class="card-title"><?php echo $product['product_name'] ?></h3>
+            <P class="my-5" style="text-align: justify;"><?php echo $product['product_description'] ?></P>
+            <div class=" d-flex align-items-center justify-content-between">
+                <h4 class="card-text me-5">NGN <?php echo number_format($product['product_price']) ?></h4>
+                <a href=<?php echo "add_to_cart.php?id={$product['product_id']}" ?> class="btn btn-primary">ADD TO CART</a>
             </div>
         </div>
     </div>

@@ -48,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $sql_query = mysqli_query($conn, $sql);
 
                                     if ($sql_query) {
-                                        echo 'REGISTRATION SUCCESSFUL';
+                                        $message = 'Account Created for ' . $username . ' Successfully!';
+                                        header('Location: login.php?message=' . urldecode($message));
                                     }
                                 }
                             }
@@ -66,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="container" style="margin-top: 100px;">
-    <form action='' class='border rounded p-3 mt-5 m-auto' style='width: 60%' method='POST'>
+    <form action='' class='border rounded p-3 mt-5 m-auto form-style' method='POST'>
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
@@ -75,7 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
         <?php endif ?>
-
         <h4>REGISTER TO START SHOPPING</h4>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">First Name</label>
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="exampleFormControlInput1" class="form-label">Comnfirm Password</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter password again" name='confirmPassword' value="<?php echo $confirmPassword ?>">
         </div>
-        <button class='btn btn-primary'>REGISTER</button>
+        <button class='btn btn-primary mb-2'>REGISTER</button>
         <p>Already have an account? <a href="login.php">login here</a></p>
     </form>
 </div>

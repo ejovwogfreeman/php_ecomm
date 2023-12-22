@@ -20,7 +20,7 @@ if (isset($_GET['id'])) {
             redirectWithMessage($message);
         } else {
             // Decrease the quantity by 1
-            $_SESSION['cart'][$productId]--;
+            $_SESSION['cart'][$productId] = max(1, $_SESSION['cart'][$productId] - 1);
             header('Location: cart.php');
         }
     } else {

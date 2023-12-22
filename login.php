@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             $_SESSION['user'] = $user;
 
-                            $message = 'LOGIN SUCCESSFUL';
+                            $message = $user[0]['username'] . " LOGGED IN SUCCESSFUL";
 
                             header('Location: index.php?message=' . urldecode($message));
                         } else {
@@ -60,8 +60,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="container" style="margin-top: 100px;">
-    <form action="" class='border rounded p-3 mt-5 m-auto' style='width: 60%' method='POST'>
-
+    <?php if (isset($_GET['message'])) : ?>
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            <strong><?php echo $_GET['message'] ?></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"></span>
+            </button>
+        </div>
+    <?php endif ?>
+    <form action="" class='border rounded p-3 mt-5 m-auto form-style' method='POST'>
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
@@ -70,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
         <?php endif ?>
-
         <h4>LOGIN TO CONTINUE SHOPPING</h4>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Email</label>
@@ -80,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="exampleFormControlInput1" class="form-label">Password</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
         </div>
-        <button class='btn btn-primary'>LOGIN</button>
+        <button class='btn btn-primary mb-2'>LOGIN</button>
         <p>New here? <a href="register.php">create an account</a></p>
     </form>
 </div>
