@@ -54,7 +54,7 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
         </div>
     </div>
 
-    <?php if (isset($_GET['message']) && (strstr($_GET['message'], "successfully"))  || (isset($_GET['message']) && (strstr($_GET['message'], "SUCCESSFUL")))) : ?>
+    <?php if (isset($_GET['message']) && (strstr($_GET['message'], "successfully")) || (isset($_GET['message']) && (strstr($_GET['message'], "Successfully"))  || (isset($_GET['message']) && (strstr($_GET['message'], "SUCCESSFUL"))))) : ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong><?php echo $_GET['message'] ?></strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">

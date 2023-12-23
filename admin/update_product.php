@@ -10,7 +10,21 @@ function redirectWithMessage($message)
     exit();
 }
 
-$name = $description = $price = $image = $Err = '';
+$id = $_GET['id'];
+
+$sql = "SELECT * FROM products WHERE product_id = '$id'";
+
+$sql_query = mysqli_query($conn, $sql);
+
+$product = mysqli_fetch_assoc($sql_query);
+
+$name = $product['product_name'];
+
+$description = $product['product_description'];
+
+$price = $product['product_price'];
+
+$Err = '';
 
 if (isset($_POST['submit'])) {
     if (empty($_POST['name'])) {
@@ -37,13 +51,15 @@ if (isset($_POST['submit'])) {
                         $imageData = file_get_contents($image);
                         $imageData =  mysqli_real_escape_string($conn, $imageData);
 
-                        $sql = "INSERT INTO products (product_name, product_description, product_price, product_image) VALUES ('$name', '$description', '$price', '$imageData')";
+                        $productId = $_POST['id'];
+
+                        $sql = "UPDATE products SET product_name = '$name', product_description='$description', product_price='$price', product_image='$imageData' WHERE product_id = '$productId'";
 
                         if (mysqli_query($conn, $sql)) {
-                            $message = 'Product Uploaded Successfully';
+                            $message = 'Product Updated Successfully';
                             redirectWithMessage($message);
                         } else {
-                            echo "Error uploading product: " . mysqli_error($conn);
+                            echo "Error updating product: " . mysqli_error($conn);
                         }
                     } else {
                         echo "Invalid file type. Allowed types: " . implode(', ', $allowedExtensions);
@@ -58,7 +74,7 @@ if (isset($_POST['submit'])) {
 
 <div class="container" style="margin-top: 100px;">
 
-    <form action="upload_product.php" class='border rounded p-3 mt-5 m-auto form-style' method="post" enctype="multipart/form-data">
+    <form action="update_product.php" class='border rounded p-3 mt-5 m-auto form-style' method="post" enctype="multipart/form-data">
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
@@ -67,7 +83,8 @@ if (isset($_POST['submit'])) {
                 </button>
             </div>
         <?php endif ?>
-        <h4 class="mb-3">UPLOAD A PRODUCT</h4>
+        <h4 class="mb-3">UPDATE PRODUCT</h4>
+        <input type="text" class="form-control" name="id" id="id" value="<?php echo $id ?>" hidden>
         <div class="form-group mb-3">
             <label class="mb-2" for="name">Product Name:</label>
             <input type="text" class="form-control" name="name" id="name" value="<?php echo $name ?>">
@@ -88,7 +105,7 @@ if (isset($_POST['submit'])) {
             <input type="file" class="form-control-file border rounded p-2" name="image" id="image" accept="image/png, image/jpeg, image/webp" style="width: 100% ">
         </div>
 
-        <button type="submit" class="btn btn-primary" name="submit">Upload Product</button>
+        <button type="submit" class="btn btn-primary" name="submit">Update Product</button>
     </form>
 
 </div>

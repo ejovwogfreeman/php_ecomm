@@ -7,6 +7,7 @@ include('./config/db.php');
 // Check if there are products in the cart
 $cartProducts = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 
+$phoneNum = $_GET['phoneNum'];
 $shippingAddress = $_GET['shippingAddress'];
 
 if (!empty($cartProducts)) {
@@ -47,7 +48,7 @@ $currentDateTime = date('Y-m-d H:i:s');
 if (isset($_GET['status']) && $_GET['status'] === 'completed') {
     // Insert order details into the orders table
     $status = 'Processing'; // Default status
-    $sqlOrder = "INSERT INTO orders (user_id, shipping_address, total_price, status, date_ordered) VALUES ({$user['user_id']}, '$shippingAddress', $totalPrice, '$status', '$currentDateTime')";
+    $sqlOrder = "INSERT INTO orders (user_id, phone_number, shipping_address, total_price, status, date_ordered) VALUES ({$user['user_id']}, '$phoneNum', '$shippingAddress', $totalPrice, '$status', '$currentDateTime')";
     mysqli_query($conn, $sqlOrder);
 
     // Get the order_id of the inserted order

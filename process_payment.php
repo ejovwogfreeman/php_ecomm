@@ -41,6 +41,7 @@ $email = $user['email'];
 // Create a unique transaction reference using the current timestamp
 $transaction_reference = time();
 
+$phoneNum = $_GET['phoneNum'];
 $shippingAddress = $_GET['shippingAddress'];
 
 // Prepare payment request data
@@ -49,7 +50,7 @@ $request = array(
     'amount' => $amount,
     'currency' => 'NGN',
     'payment_options' => 'card',
-    'redirect_url' => 'http://localhost/php_ecommerce/payment_status.php?shippingAddress=' . urlencode($shippingAddress),
+    'redirect_url' => 'http://localhost/php_ecommerce/payment_status.php?phoneNum=' . urlencode($phoneNum) . '&shippingAddress=' . urlencode($shippingAddress),
     'customer' => array(
         'email' => $email,
         'name' => $first_name . ' ' . $last_name,

@@ -48,6 +48,12 @@ $product = mysqli_fetch_all($sql_query, MYSQLI_ASSOC)[0];
                 <h4 class="card-text me-5">NGN <?php echo number_format($product['product_price']) ?></h4>
                 <a href=<?php echo "add_to_cart.php?id={$product['product_id']}" ?> class="btn btn-primary">ADD TO CART</a>
             </div>
+            <?php if (isset($_SESSION['user']) && $_SESSION['user'][0]['is_admin'] === 'true') : ?>
+                <div class="mt-3">
+                    <a href=<?php echo "/php_ecommerce/admin/update_product.php?id={$product['product_id']}" ?> class="btn btn-outline-primary">UPDATE</a>
+                    <a href=<?php echo "/php_ecommerce/admin/delete_product.php?id={$product['product_id']}" ?> class="btn btn-outline-danger">DELETE</a>
+                </div>
+            <?php endif ?>
         </div>
     </div>
 </div>

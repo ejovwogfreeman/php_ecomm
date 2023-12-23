@@ -24,6 +24,12 @@ if (isset($_SESSION['user'])) {
 }
 ?>
 
+<style>
+    strong {
+        width: 150px;
+    }
+</style>
+
 <div class="container" style="margin-top: 100px;">
 
     <div class=" my-3">
@@ -38,10 +44,11 @@ if (isset($_SESSION['user'])) {
             <?php endif ?>
         </div>
         <div class="mt-3">
-            <p><strong>Shipping Address:</strong> <?php echo $order['shipping_address']; ?></p>
-            <p><strong>Total Price (NGN):</strong> <?php echo number_format($order['total_price']); ?></p>
-            <p><strong>Date Ordered:</strong> <?php echo $order['date_ordered']; ?></p>
-            <p><strong>Status:</strong>
+            <p class="d-flex"><strong>Phone Number: </strong> <span><?php echo $order['phone_number']; ?></span></p>
+            <p class="d-flex"><strong>Shipping Address:</strong> <span><?php echo $order['shipping_address']; ?></span></p>
+            <p class="d-flex"><strong>Total Price (NGN):</strong> <span><?php echo number_format($order['total_price']); ?></span></p>
+            <p class="d-flex"><strong>Date Ordered:</strong> <span><?php echo $order['date_ordered']; ?></span></p>
+            <p class="d-flex"><strong>Status:</strong>
                 <small class="<?php echo $order['status'] === 'Processing' ? 'bg-warning' : 'bg-success'; ?> text-light p-1 rounded">
                     <?php echo ucfirst($order['status']); ?>
                 </small>

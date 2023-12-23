@@ -5,7 +5,7 @@ include('./config/db.php');
 include('./partials/header.php');
 
 $cartProducts = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-$shippingAddress = $Err = '';
+$phoneNum = $shippingAddress  =  $Err = '';
 
 if (!empty($cartProducts)) {
     $totalQuantity = 0;
@@ -30,11 +30,16 @@ if (!empty($cartProducts)) {
 
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (empty($_POST['shippingAddress'])) {
-            $Err = 'PLEASE ENTER A SHIPPING ADDRESS';
+        if (empty($_POST['phoneNum'])) {
+            $Err = 'PLEASE ENTER A PHONE NUMBER';
         } else {
-            $shippingAddress = htmlspecialchars($_POST['shippingAddress']);
-            header("Location: process_payment.php?shippingAddress=$shippingAddress");
+            $phoneNum = htmlspecialchars($_POST['phoneNum']);
+            if (empty($_POST['shippingAddress'])) {
+                $Err = 'PLEASE ENTER A SHIPPING ADDRESS';
+            } else {
+                $shippingAddress = htmlspecialchars($_POST['shippingAddress']);
+                header("Location: process_payment.php?phoneNum=" . urlencode($phoneNum) . "&shippingAddress=" . urlencode($shippingAddress));
+            }
         }
     }
 }
@@ -58,6 +63,10 @@ if (!empty($cartProducts)) {
                 </div>
             <?php endif ?>
             <h5 class="text-center mt-2">Enter Your shipping Address</h5>
+            <div class="my-3">
+                <label for="phoneNum" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" id="phoneNum" name="phoneNum" value="<?php echo $phoneNum ?>">
+            </div>
             <div class="my-3">
                 <label for="shippingAddress" class="form-label">Address/Location</label>
                 <input type="text" class="form-control" id="shippingAddress" name="shippingAddress" value="<?php echo $shippingAddress ?>">
