@@ -10,13 +10,14 @@ function redirectWithMessage($message)
     exit();
 }
 
-$name = $description = $price = $image = $Err = '';
+$name = $category = $description = $price = $image = $Err = '';
 
 if (isset($_POST['submit'])) {
     if (empty($_POST['name'])) {
         $Err = 'PLEASE ADD PRODUCT NAME';
     } else {
         $name = htmlspecialchars($_POST['name']);
+        $category = htmlspecialchars($_POST['category']);
         if (empty($_POST['description'])) {
             $Err = 'PLEASE ADD PRODUCT DESCRIPTION';
         } else {
@@ -37,11 +38,12 @@ if (isset($_POST['submit'])) {
                         $imageData = file_get_contents($image);
                         $imageData =  mysqli_real_escape_string($conn, $imageData);
 
-                        $sql = "INSERT INTO products (product_name, product_description, product_price, product_image) VALUES ('$name', '$description', '$price', '$imageData')";
+                        $sql = "INSERT INTO products (product_name, product_category, product_description, product_price, product_image) VALUES ('$name', '$category', '$description', '$price', '$imageData')";
 
                         if (mysqli_query($conn, $sql)) {
                             $message = 'Product Uploaded Successfully';
                             redirectWithMessage($message);
+                            exit();
                         } else {
                             echo "Error uploading product: " . mysqli_error($conn);
                         }
@@ -71,6 +73,16 @@ if (isset($_POST['submit'])) {
         <div class="form-group mb-3">
             <label class="mb-2" for="name">Product Name:</label>
             <input type="text" class="form-control" name="name" id="name" value="<?php echo $name ?>">
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="mb-2" for="name">Product Category:</label>
+            <select class="form-select" aria-label="Default select example" name="category">
+                <option value="electronics">Electronics</option>
+                <option value="laptops">Laptops</option>
+                <option value="accessories">Accessories</option>
+                <option value="Phones">Phones</option>
+            </select>
         </div>
 
         <div class="form-group mb-3">

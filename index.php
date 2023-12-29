@@ -19,30 +19,131 @@ if (isset($_GET['query'])) {
 
 $sql_query = mysqli_query($conn, $sql);
 $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
+
+function showFlyingAlert($message, $className)
+{
+    echo <<<EOT
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var alertDiv = document.createElement("div");
+            alertDiv.className = "{$className}";
+            alertDiv.innerHTML = "{$message}";
+            document.body.appendChild(alertDiv);
+
+            // Triggering reflow to enable animation
+            alertDiv.offsetWidth;
+
+            // Add a class to trigger the fly-in animation
+            alertDiv.style.left = "10px";
+
+            // Remove the fly-in style after 3 seconds
+            setTimeout(function() {
+                alertDiv.style.left = "10px";
+            }, 2000);
+
+            // Add a class to trigger the fly-out animation after 3 seconds
+            setTimeout(function() {
+                alertDiv.style.left = "-300px";
+            }, 4000);
+
+            // Remove the element after the total duration of the animation (9 seconds)
+            setTimeout(function() {
+                alertDiv.remove();
+            }, 6000);
+        });
+    </script>
+EOT;
+}
+
+if (isset($_GET['message'])) {
+    $message = $_GET['message'];
+
+    if (stristr($message, "successfully") || stristr($message, "Successfully") || stristr($message, "SUCCESSFUL")) {
+        showFlyingAlert($message, "flying-success-alert");
+    } else {
+        showFlyingAlert($message, "flying-danger-alert");
+    }
+}
+
 ?>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Search Products</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+<style>
+    .flying-success-alert {
+        position: fixed;
+        z-index: 11111111111111;
+        top: 10px;
+        left: -300px;
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        transition: left 1.5s ease-in-out;
+    }
+
+    .flying-danger-alert {
+        position: fixed;
+        z-index: 11111111111111;
+        top: 10px;
+        left: -300px;
+        background-color: #FF5252;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        transition: left 1.5s ease-in-out;
+    }
+</style>
+
+
+
+
+<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item position-relative active" data-bs-interval="10000">
+            <img src="images/electronics.jpeg" class="d-block w-100" alt="..." />
+            <div class="position-absolute text-light" style="top: 47%; text-align: center; width: 100%">
+                <h1>Electronics</h1>
+                <p>Some representative placeholder content for the first slide.</p>
+                <a href="categories.php?category=electronics" class="btn btn-primary">SHOP NOW</a>
             </div>
-            <div class="modal-body border">
-                <form method="GET" action="" class="border border-primary d-flex align-items-center justify-content-between rounded shadow-blue p-1">
-                    <i style="font-size: 20px;" class="bi bi-search text-primary ms-2"></i>
-                    <input type="text" class="outline-none border-none mx-2" name="query" id="search" placeholder="Search Products..." style="border: none; outline: none; background: transparent; width: 100%">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
+        </div>
+        <div class="carousel-item position-relative" data-bs-interval="2000">
+            <img src="images/img1.jpg" class="d-block w-100" alt="..." />
+            <div class="position-absolute text-light" style="top: 47%; text-align: center; width: 100%">
+                <h1>Laptops</h1>
+                <p>Some representative placeholder content for the second slide.</p>
+                <a href="categories.php?category=laptops" class="btn btn-primary">SHOP NOW</a>
+            </div>
+        </div>
+        <div class="carousel-item position-relative" data-bs-interval="3000">
+            <img src="images/img2.jpg" class="d-block w-100" alt="..." />
+            <div class="position-absolute text-light" style="top: 47%; text-align: center; width: 100%">
+                <h1>Accessories</h1>
+                <p>Some representative placeholder content for the second slide.</p>
+                <a href="categories.php?category=accessories" class="btn btn-primary">SHOP NOW</a>
+            </div>
+        </div>
+        <div class="carousel-item position-relative">
+            <img src="images/img3.jpg" class="d-block w-100" alt="..." />
+            <div class="position-absolute text-light" style="top: 47%; text-align: center; width: 100%">
+                <h1>Phones</h1>
+                <p>Some representative placeholder content for the third slide.</p>
+                <a href="categories.php?category=phones" class="btn btn-primary">SHOP NOW</a>
             </div>
         </div>
     </div>
-</div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
 
-<div class="container" style="margin-top: 100px;">
-    <div class="d-flex align-items-center justify-content-between my-3">
+<div class="container">
+    <!-- <div class="d-flex align-items-center justify-content-between my-3">
         <div>
             <?php if (isset($_SESSION['user'])) :  ?>
                 <h3>Welcome <?php echo $username ?>!</h3>
@@ -68,9 +169,53 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
                 <span aria-hidden="true"></span>
             </button>
         </div>
-    <?php endif ?>
+    <?php endif ?> -->
 
-    <?php if (!empty($products)) : ?>
+    <div class="row mt-4" id="categories">
+        <h3 class="mb-3">Our Categories</h3>
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+            <div class="card">
+                <a href=<?php echo "categories.php?category=electronics" ?> class="text-decoration-none text-dark">
+                    <img class="card-img-top border" src="images/electronics.jpeg" style="height: 350px; max-width: 100%; object-fit: cover">
+                    <div class="card-body">
+                        <h3 class="card-title">Electronics</h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+            <div class="card">
+                <a href=<?php echo "categories.php?category=laptops" ?> class="text-decoration-none text-dark">
+                    <img class="card-img-top border" src="images/img1.jpg" style="height: 350px; max-width: 100%; object-fit: cover">
+                    <div class="card-body">
+                        <h3 class="card-title">Laptops</h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+            <div class="card">
+                <a href=<?php echo "categories.php?category=accessories" ?> class="text-decoration-none text-dark">
+                    <img class="card-img-top border" src="images/img2.jpg" style="height: 350px; max-width: 100%; object-fit: cover">
+                    <div class="card-body">
+                        <h3 class="card-title">Accessories</h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+            <div class="card">
+                <a href=<?php echo "categories.php?category=phones" ?> class="text-decoration-none text-dark">
+                    <img class="card-img-top border" src="images/img3.jpg" style="height: 350px; max-width: 100%; object-fit: cover">
+                    <div class="card-body">
+                        <h3 class="card-title">Phone</h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- <?php if (!empty($products)) : ?>
         <div class="row mt-4">
             <?php foreach ($products as $product) : ?>
                 <div class="col-12 col-sm-6 col-lg-4 mb-4">
@@ -102,7 +247,7 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
         </div>
     <?php else : ?>
         <p>No products found.</p>
-    <?php endif ?>
+    <?php endif ?> -->
 </div>
 
 <?php include('./partials/footer.php'); ?>

@@ -4,6 +4,7 @@ include('admincheck.php');
 include('../config/db.php');
 include('../partials/header.php');
 
+
 function redirectWithMessage($message)
 {
     header('Location: /php_ecommerce/index.php?message=' . urlencode($message));
@@ -18,11 +19,17 @@ $sql_query = mysqli_query($conn, $sql);
 
 $product = mysqli_fetch_assoc($sql_query);
 
-$name = $product['product_name'];
+if (isset($product['product_name'])) {
+    $name = $product['product_name'];
+}
 
-$description = $product['product_description'];
+if (isset($product['product_description'])) {
+    $description = $product['product_description'];
+}
 
-$price = $product['product_price'];
+if (isset($product['product_price'])) {
+    $price = $product['product_price'];
+}
 
 $Err = '';
 
@@ -31,6 +38,7 @@ if (isset($_POST['submit'])) {
         $Err = 'PLEASE ADD PRODUCT NAME';
     } else {
         $name = htmlspecialchars($_POST['name']);
+        $category = htmlspecialchars($_POST['category']);
         if (empty($_POST['description'])) {
             $Err = 'PLEASE ADD PRODUCT DESCRIPTION';
         } else {
@@ -53,11 +61,12 @@ if (isset($_POST['submit'])) {
 
                         $productId = $_POST['id'];
 
-                        $sql = "UPDATE products SET product_name = '$name', product_description='$description', product_price='$price', product_image='$imageData' WHERE product_id = '$productId'";
+                        $sql = "UPDATE products SET product_name = '$name', product_category = '$category', product_description='$description', product_price='$price', product_image='$imageData' WHERE product_id = '$productId'";
 
                         if (mysqli_query($conn, $sql)) {
                             $message = 'Product Updated Successfully';
                             redirectWithMessage($message);
+                            exit();
                         } else {
                             echo "Error updating product: " . mysqli_error($conn);
                         }
@@ -88,6 +97,16 @@ if (isset($_POST['submit'])) {
         <div class="form-group mb-3">
             <label class="mb-2" for="name">Product Name:</label>
             <input type="text" class="form-control" name="name" id="name" value="<?php echo $name ?>">
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="mb-2" for="name">Product Category:</label>
+            <select class="form-select" aria-label="Default select example" name="category">
+                <option value="electronics">Electronics</option>
+                <option value="laptops">Laptops</option>
+                <option value="accessories">Accessories</option>
+                <option value="Phones">Phones</option>
+            </select>
         </div>
 
         <div class="form-group mb-3">
