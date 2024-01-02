@@ -1,5 +1,6 @@
 <?php
 
+include('./config/session.php');
 include('./config/db.php');
 include('./partials/header.php');
 
@@ -66,8 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<div class="container" style="margin-top: 100px;">
-    <form action='' class='border rounded p-3 pt-5 mt-5 m-auto form-style' method='POST'>
+<div class="container d-flex" style="margin-top: 100px;">
+    <div style="flex: 1;"><?php include('./partials/sidebar.php') ?></div>
+    <form action='' class='flex-2 border rounded p-3 pt-5 ms-3 form-style' method='POST' style="flex: 3;">
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
@@ -76,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
         <?php endif ?>
-        <h4 class="mb-3">REGISTER TO START SHOPPING</h4>
+        <h4 class="mb-3">UPDATE PROFILE</h4>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">First Name</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your firstname" name='firstName' value="<?php echo $firstName ?>">
@@ -90,16 +92,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
+            <label for="exampleFormControlInput1" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your phone number" name='password' value="<?php echo $password ?>">
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Comnfirm Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter password again" name='confirmPassword' value="<?php echo $confirmPassword ?>">
+            <label for="exampleFormControlInput1" class="form-label">Address</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your address" name='confirmPassword' value="<?php echo $confirmPassword ?>">
         </div>
-        <button class='btn btn-primary mb-2'>REGISTER</button>
-        <p class="mb-0">Already have an account? <a href="login.php">Login here</a></p>
+        <div class="form-group mb-3">
+            <label class="mb-2" for="image">Profile Picture (PNG, JPG, JPEG, WebP):</label> <br>
+            <input type="file" class="form-control-file border rounded p-2" name="image" id="image" accept="image/png, image/jpeg, image/webp" style="width: 100% ">
+        </div>
     </form>
 </div>
-
 <?php include('./partials/footer.php'); ?>

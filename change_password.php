@@ -1,5 +1,6 @@
 <?php
 
+include('./config/session.php');
 include('./config/db.php');
 include('./partials/header.php');
 
@@ -66,8 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<div class="container" style="margin-top: 100px;">
-    <form action='' class='border rounded p-3 pt-5 mt-5 m-auto form-style' method='POST'>
+<div class="container d-flex" style="margin-top: 100px;">
+    <div style="flex: 1;"><?php include('./partials/sidebar.php') ?></div>
+    <form action='' class='flex-2 border rounded p-3 pt-5 ms-3 form-style' method='POST' style="flex: 3;">
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
@@ -76,30 +78,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
         <?php endif ?>
-        <h4 class="mb-3">REGISTER TO START SHOPPING</h4>
+        <h4 class="mb-3">CHANGE PASSWORD</h4>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your firstname" name='firstName' value="<?php echo $firstName ?>">
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your lastname" name='lastName' value="<?php echo $lastName ?>">
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Email</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Password</label>
+            <label for="exampleFormControlInput1" class="form-label">Old Password</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Comnfirm Password</label>
+            <label for="exampleFormControlInput1" class="form-label">New Password</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Comnfirm New Password</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter password again" name='confirmPassword' value="<?php echo $confirmPassword ?>">
         </div>
-        <button class='btn btn-primary mb-2'>REGISTER</button>
-        <p class="mb-0">Already have an account? <a href="login.php">Login here</a></p>
+        <button class='btn btn-primary mb-2'>CHANGE PASSWORD</button>
     </form>
 </div>
-
 <?php include('./partials/footer.php'); ?>

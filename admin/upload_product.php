@@ -58,18 +58,18 @@ if (isset($_POST['submit'])) {
 
 ?>
 
-<div class="container" style="margin-top: 100px;">
-
-    <form action="upload_product.php" class='border rounded p-3 mt-5 m-auto form-style' method="post" enctype="multipart/form-data">
+<div class="container d-flex" style="margin-top: 100px;">
+    <div class="profile-left"><?php include('../partials/sidebar.php') ?></div>
+    <form action='' class='flex-2 border rounded p-3 pt-5 ms-3 form-style' method='POST' style="flex: 3;" method=" post" enctype="multipart/form-data">
         <?php if ($Err) : ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class=" alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
             </div>
         <?php endif ?>
-        <h4 class="mb-3">UPLOAD A PRODUCT</h4>
+        <h4 class=" mb-3">UPLOAD A PRODUCT</h4>
         <div class="form-group mb-3">
             <label class="mb-2" for="name">Product Name:</label>
             <input type="text" class="form-control" name="name" id="name" value="<?php echo $name ?>">
@@ -103,6 +103,7 @@ if (isset($_POST['submit'])) {
         <button type="submit" class="btn btn-primary" name="submit">Upload Product</button>
     </form>
 
+    <!-- </div> -->
 </div>
 
 <?php include('../partials/footer.php'); ?>

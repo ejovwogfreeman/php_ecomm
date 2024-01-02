@@ -1,48 +1,54 @@
 <?php
 
-include('./config/session.php');
-include('./config/db.php');
+// include('./config/session.php');
+// include('./config/db.php');
+ob_start();
+include('get_cart_items.php');
 include('./partials/header.php');
 
-$cartProducts = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+// $cartProducts = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 $phoneNum = $shippingAddress  =  $Err = '';
+$counter = 1;
 
-if (!empty($cartProducts)) {
-    $totalQuantity = 0;
-    $totalPrice = 0;
-    $counter = 1;
+// if (!empty($cartProducts)) {
+//     $totalQuantity = 0;
+//     $totalPrice = 0;
+//     $counter = 1;
 
-    foreach ($cartProducts as $productId => $quantity) {
-        $totalQuantity += $quantity;
+//     foreach ($cartProducts as $productId => $quantity) {
+//         $totalQuantity += $quantity;
 
-        $sql = "SELECT * FROM products WHERE product_id = $productId";
-        $result = mysqli_query($conn, $sql);
-        $product = mysqli_fetch_assoc($result);
+//         $sql = "SELECT * FROM products WHERE product_id = $productId";
+//         $result = mysqli_query($conn, $sql);
+//         $product = mysqli_fetch_assoc($result);
 
-        $totalPrice += $quantity * $product['product_price'];
-    }
+//         $totalPrice += $quantity * $product['product_price'];
+//     }
 
-    $productIds = array_keys($cartProducts);
-    $productIdsString = implode(',', $productIds);
-    $sql = "SELECT * FROM products WHERE product_id IN ($productIdsString)";
-    $result = mysqli_query($conn, $sql);
-    $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
+//     $productIds = array_keys($cartProducts);
+//     $productIdsString = implode(',', $productIds);
+//     $sql = "SELECT * FROM products WHERE product_id IN ($productIdsString)";
+//     $result = mysqli_query($conn, $sql);
+//     $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+// include()
 
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (empty($_POST['phoneNum'])) {
-            $Err = 'PLEASE ENTER A PHONE NUMBER';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (empty($_POST['phoneNum'])) {
+        $Err = 'PLEASE ENTER A PHONE NUMBER';
+    } else {
+        $phoneNum = htmlspecialchars($_POST['phoneNum']);
+        if (empty($_POST['shippingAddress'])) {
+            $Err = 'PLEASE ENTER A SHIPPING ADDRESS';
         } else {
-            $phoneNum = htmlspecialchars($_POST['phoneNum']);
-            if (empty($_POST['shippingAddress'])) {
-                $Err = 'PLEASE ENTER A SHIPPING ADDRESS';
-            } else {
-                $shippingAddress = htmlspecialchars($_POST['shippingAddress']);
-                header("Location: process_payment.php?phoneNum=" . urlencode($phoneNum) . "&shippingAddress=" . urlencode($shippingAddress));
-            }
+            $shippingAddress = htmlspecialchars($_POST['shippingAddress']);
+            header("Location: process_payment.php?phoneNum=" . urlencode($phoneNum) . "&shippingAddress=" . urlencode($shippingAddress));
         }
     }
 }
+
+ob_end_flush();
 
 ?>
 
@@ -89,7 +95,7 @@ if (!empty($cartProducts)) {
                             <tr>
                                 <th scope="row"><?php echo $counter++; ?></th>
                                 <td><?php echo $product['product_name'] ?></td>
-                                <td><?php echo $cartProducts[$product['product_id']]; ?></td>
+                                <td><?php echo $product['quantity']; ?></td>
                                 <td><?php echo number_format($product['product_price']); ?></td>
                             </tr>
                         </tbody>

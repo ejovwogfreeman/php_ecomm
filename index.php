@@ -72,7 +72,7 @@ if (isset($_GET['message'])) {
     .flying-success-alert {
         position: fixed;
         z-index: 11111111111111;
-        top: 10px;
+        top: 15px;
         left: -300px;
         background-color: #4CAF50;
         color: #fff;
@@ -84,7 +84,7 @@ if (isset($_GET['message'])) {
     .flying-danger-alert {
         position: fixed;
         z-index: 11111111111111;
-        top: 10px;
+        top: 15px;
         left: -300px;
         background-color: #FF5252;
         color: #fff;
@@ -172,7 +172,7 @@ if (isset($_GET['message'])) {
     <?php endif ?> -->
 
     <div class="row mt-4" id="categories">
-        <h3 class="mb-3">Our Categories</h3>
+        <h3 class="mb-3">Product Categories</h3>
         <div class="col-12 col-sm-6 col-lg-3 mb-4">
             <div class="card">
                 <a href=<?php echo "categories.php?category=electronics" ?> class="text-decoration-none text-dark">

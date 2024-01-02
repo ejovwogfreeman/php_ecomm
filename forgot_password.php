@@ -76,29 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
         <?php endif ?>
-        <h4 class="mb-3">REGISTER TO START SHOPPING</h4>
+        <h4 class="mb-3">FORGOT PASSWORD</h4>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your firstname" name='firstName' value="<?php echo $firstName ?>">
+            <label for="exampleFormControlInput1" class="form-label">Your Email</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your registered email" name='email' value="<?php echo $email ?>">
         </div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your lastname" name='lastName' value="<?php echo $lastName ?>">
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Email</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Comnfirm Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter password again" name='confirmPassword' value="<?php echo $confirmPassword ?>">
-        </div>
-        <button class='btn btn-primary mb-2'>REGISTER</button>
-        <p class="mb-0">Already have an account? <a href="login.php">Login here</a></p>
+        <button class='btn btn-primary mb-2'>FORGOT PASSWORD</button>
+        <p class="mb-0">Back to <a href="login.php">Login</a></p>
     </form>
 </div>
 

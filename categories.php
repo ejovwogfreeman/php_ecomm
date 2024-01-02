@@ -56,7 +56,7 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
     <?php if (!empty($products)) : ?>
         <div class="row mt-4">
             <?php foreach ($products as $product) : ?>
-                <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                <div class="col-12 col-sm-6 col-lg-3 mb-4">
                     <div class="card">
                         <a href=<?php echo "product.php?id={$product['product_id']}" ?> class="text-decoration-none text-dark">
                             <?php

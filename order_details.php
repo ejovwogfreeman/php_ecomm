@@ -57,26 +57,28 @@ if (isset($_SESSION['user'])) {
     </div>
 
     <?php if (!empty($orderItems)) : ?>
-        <table class="table text-center">
-            <thead>
-                <tr>
-                    <th scope="col">S/N</th>
-                    <th scope="col">Product</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price Paid (NGN)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($orderItems as $item) : ?>
+        <div class="table-responsive">
+            <table class="table text-center">
+                <thead>
                     <tr>
-                        <th scope="row"><?php echo $counter++ ?></th>
-                        <td><?php echo $item['product_name']; ?></td>
-                        <td><?php echo $item['quantity']; ?></td>
-                        <td><?php echo number_format($item['price_paid']); ?></td>
+                        <th scope="col">S/N</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price Paid (NGN)</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($orderItems as $item) : ?>
+                        <tr>
+                            <th scope="row"><?php echo $counter++ ?></th>
+                            <td><?php echo $item['product_name']; ?></td>
+                            <td><?php echo $item['quantity']; ?></td>
+                            <td><?php echo number_format($item['price_paid']); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     <?php else : ?>
         <p>No items found for this order.</p>
     <?php endif; ?>

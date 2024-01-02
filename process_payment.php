@@ -1,37 +1,42 @@
 <?php
 
-include('./config/session.php');
-include('./config/db.php');
+// include('./config/session.php');
+// include('./config/db.php');
 
-// Check if there are products in the cart
-$cartProducts = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+// // Check if there are products in the cart
+// $cartProducts = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 
-if (!empty($cartProducts)) {
-    $totalQuantity = 0;
-    $totalPrice = 0;
+// if (!empty($cartProducts)) {
+//     $totalQuantity = 0;
+//     $totalPrice = 0;
 
-    foreach ($cartProducts as $productId => $quantity) {
-        $totalQuantity += $quantity;
+//     foreach ($cartProducts as $productId => $quantity) {
+//         $totalQuantity += $quantity;
 
-        $sql = "SELECT * FROM products WHERE product_id = $productId";
-        $result = mysqli_query($conn, $sql);
-        $product = mysqli_fetch_assoc($result);
+//         $sql = "SELECT * FROM products WHERE product_id = $productId";
+//         $result = mysqli_query($conn, $sql);
+//         $product = mysqli_fetch_assoc($result);
 
-        $totalPrice += $quantity * $product['product_price'];
-    }
+//         $totalPrice += $quantity * $product['product_price'];
+//     }
 
-    // Fetch product details for the selected products
-    $productIds = array_keys($cartProducts);
-    $productIdsString = implode(',', $productIds);
-    $sql = "SELECT * FROM products WHERE product_id IN ($productIdsString)";
-    $result = mysqli_query($conn, $sql);
-    $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
-}
+//     // Fetch product details for the selected products
+//     $productIds = array_keys($cartProducts);
+//     $productIdsString = implode(',', $productIds);
+//     $sql = "SELECT * FROM products WHERE product_id IN ($productIdsString)";
+//     $result = mysqli_query($conn, $sql);
+//     $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
+// }
 
-// Check if a user is logged in
-if (isset($_SESSION['user'])) {
-    $user = $_SESSION['user'][0];
-}
+
+// // Check if a user is logged in
+// if (isset($_SESSION['user'])) {
+//     $user = $_SESSION['user'][0];
+// }
+
+
+
+include('get_cart_items.php');
 
 $amount = $totalPrice;
 $first_name = $user['first_name'];

@@ -1,5 +1,6 @@
 <?php
 
+ob_start();
 session_start();
 include('./config/db.php');
 include('./partials/header.php');
@@ -39,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             $_SESSION['user'] = $user;
 
-                            $message = $user[0]['username'] . " LOGGED IN SUCCESSFUL";
+                            $message = $user[0]['username'] . " LOGGED IN SUCCESSFULY";
 
                             header('Location: index.php?message=' . urldecode($message));
                         } else {
@@ -54,8 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-
-
+ob_end_flush();
 
 ?>
 
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </div>
     <?php endif ?>
-    <form action="" class='border rounded p-3 mt-5 m-auto form-style' method='POST'>
+    <form action="" class='border rounded p-3 pt-5 mt-5 m-auto form-style' method='POST'>
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
         <?php endif ?>
-        <h4>LOGIN TO CONTINUE SHOPPING</h4>
+        <h4 class="mb-3">LOGIN TO CONTINUE SHOPPING</h4>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Email</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
@@ -87,7 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
         </div>
         <button class='btn btn-primary mb-2'>LOGIN</button>
-        <p>New here? <a href="register.php">create an account</a></p>
+        <p class="mb-0">New here? <a href="register.php">create an account</a></p>
+        <a href="forgot_password.php">forgot password?</a>
     </form>
 </div>
 
