@@ -40,10 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                 $check_email_query = mysqli_query($conn, $check_email);
 
+                                $currentDateTime = date('Y-m-d H:i:s');
+
                                 if (mysqli_num_rows($check_email_query) > 0) {
                                     $Err = "A USER WITH THIS EMAIL ALREADY EXISTS";
                                 } else {
-                                    $sql = "INSERT INTO users (username, first_name, last_name, password, email, is_admin) values ('$username', '$firstName', '$lastName', '$encrypted_password', '$email', 'false')";
+                                    $sql = "INSERT INTO users (username, first_name, last_name, password, email, is_admin, date_joined) values ('$username', '$firstName', '$lastName', '$encrypted_password', '$email', 'false', '$currentDateTime')";
 
                                     $sql_query = mysqli_query($conn, $sql);
 

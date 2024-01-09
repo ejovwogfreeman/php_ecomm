@@ -21,7 +21,7 @@ if (isset($_SESSION['user'])) {
 <!-- <div class="container" style="margin-top: 100px;"> -->
 <div class="container d-flex" style="margin-top: 100px;">
     <div class="profile-left"><?php include('../partials/sidebar.php') ?></div>
-    <div class='border rounded p-3 pt-5 profile' style="flex: 3;" style="overflow-x: scroll;">
+    <div class='border rounded p-3 pt-5 ms-3 profile' style="flex: 3;" style="overflow-x: scroll;">
         <?php if (isset($_GET['message']) && (strstr($_GET['message'], "Successfully"))  || (isset($_GET['message']) && (strstr($_GET['message'], "SUCCESSFUL")))) : ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong><?php echo $_GET['message'] ?></strong>

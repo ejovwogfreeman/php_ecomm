@@ -4,7 +4,16 @@ include('./config/session.php');
 include('./config/db.php');
 include('./partials/header.php');
 
-$firstName = $lastName = $email = $password = $confirmPassword = $Err = '';
+
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'][0];
+    $firstName = $user['first_name'];
+    $lastName = $user['last_name'];
+    $phoneNumber = $user['phone_number'];
+    $address = $user['address'];
+}
+
+$Err = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['firstName'])) {
@@ -15,46 +24,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $Err = 'PLEASE ENTER LAST NAME';
         } else {
             $lastName = htmlspecialchars($_POST['lastName']);
-            if (empty($_POST['email'])) {
-                $Err = 'PLEASE ENTER EMAIL';
+            if (empty($_POST['phoneNumber'])) {
+                $Err = 'PLEASE ENTER A PHONE NUMBER';
             } else {
-                $email = htmlspecialchars($_POST['email']);
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $Err = 'PLEASE ENTER A VALID EMAIL';
+                $phoneNumber = htmlspecialchars($_POST['phoneNumber']);
+                if (empty($_POST['address'])) {
+                    $Err = "PLEASE ENTER AN ADDRESS";
                 } else {
-                    if (empty($_POST['password'])) {
-                        $Err = 'PLEASE ENTER A PASSWORD';
-                    } else {
-                        $password = $_POST['password'];
-                        if (strlen($password) < 8) {
-                            $Err = 'PASSWORD MUST BE ATLEAST 8 CHARACTERS LONG';
+                    $imageFileType = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+                    $allowedExtensions = ['png', 'jpg', 'jpeg', 'webp'];
+
+                    if (in_array($imageFileType, $allowedExtensions)) {
+                        $image = $_FILES['image']['tmp_name'];
+                        $imageData = file_get_contents($image);
+                        $imageData =  mysqli_real_escape_string($conn, $imageData);
+
+                        $sql = "UPDATE users SET first_name = '$firstName', last_name = '$lastName', phone_number='$phoneNumber', address='$address', profile_picture='$imageData' WHERE user_id = '{$user['user_id']}'";
+
+                        if (mysqli_query($conn, $sql)) {
+                            $message = 'Profile Updated Successfully';
+                            redirectWithMessage($message);
+                            exit();
                         } else {
-                            $confirmPassword = $_POST['confirmPassword'];
-                            if ($password !== $confirmPassword) {
-                                $Err = 'PASSWORDS DO NOT MATCH';
-                            } else {
-                                $encrypted_password = hash('md5', $password);
-
-                                $username = explode('@', $email)[0];
-
-                                $check_email = "SELECT * FROM users WHERE email = '$email'";
-
-                                $check_email_query = mysqli_query($conn, $check_email);
-
-                                if (mysqli_num_rows($check_email_query) > 0) {
-                                    $Err = "A USER WITH THIS EMAIL ALREADY EXISTS";
-                                } else {
-                                    $sql = "INSERT INTO users (username, first_name, last_name, password, email, is_admin) values ('$username', '$firstName', '$lastName', '$encrypted_password', '$email', 'false')";
-
-                                    $sql_query = mysqli_query($conn, $sql);
-
-                                    if ($sql_query) {
-                                        $message = 'Account Created for ' . $username . ' Successfully!';
-                                        header('Location: login.php?message=' . urldecode($message));
-                                    }
-                                }
-                            }
+                            echo "Error updating profile: " . mysqli_error($conn);
                         }
+                    } else {
+                        echo "Invalid file type. Allowed types: " . implode(', ', $allowedExtensions);
                     }
                 }
             }
@@ -63,12 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 
-
-
 ?>
 
+
 <div class="container d-flex" style="margin-top: 100px;">
-    <div style="flex: 1;"><?php include('./partials/sidebar.php') ?></div>
+    <div class="profile-left"><?php include('./partials/sidebar.php') ?></div>
     <form action='' class='flex-2 border rounded p-3 pt-5 ms-3 form-style' method='POST' style="flex: 3;">
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -88,21 +82,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your lastname" name='lastName' value="<?php echo $lastName ?>">
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Email</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
-        </div>
-        <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Phone Number</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your phone number" name='password' value="<?php echo $password ?>">
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your phone number" name='phoneNumber' value="<?php echo $phoneNumber ?>">
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Address</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your address" name='confirmPassword' value="<?php echo $confirmPassword ?>">
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your address" name='address' value="<?php echo $address ?>">
         </div>
         <div class="form-group mb-3">
             <label class="mb-2" for="image">Profile Picture (PNG, JPG, JPEG, WebP):</label> <br>
             <input type="file" class="form-control-file border rounded p-2" name="image" id="image" accept="image/png, image/jpeg, image/webp" style="width: 100% ">
         </div>
+        <button class='btn btn-primary mb-2'>UPDATE PROFILE</button>
     </form>
 </div>
 <?php include('./partials/footer.php'); ?>

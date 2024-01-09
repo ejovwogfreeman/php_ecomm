@@ -37,8 +37,8 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body border">
-                <form method="GET" action="" class="border border-primary d-flex align-items-center justify-content-between rounded shadow-blue p-1">
-                    <i style="font-size: 20px;" class="bi bi-search text-primary ms-2"></i>
+                <form method="GET" action="" class="border border-dark d-flex align-items-center justify-content-between rounded shadow-blue p-1">
+                    <i style="font-size: 20px;" class="bi bi-search text-dark ms-2"></i>
                     <input type="text" class="outline-none border-none mx-2" name="query" id="search" placeholder="Search Products..." style="border: none; outline: none; background: transparent; width: 100%">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
@@ -51,7 +51,7 @@ $products = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
 <div class="container" style="margin-top: 100px;">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h3><?php echo isset($_GET['category']) ? ucwords($category) : 'Search Results' ?></h3>
-        <i style="font-size: 25px;" class="bi bi-search text-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+        <i style="font-size: 25px;" class="bi bi-search text-dark" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
     </div>
     <?php if (!empty($products)) : ?>
         <div class="row mt-4">

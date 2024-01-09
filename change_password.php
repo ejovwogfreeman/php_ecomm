@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="container d-flex" style="margin-top: 100px;">
-    <div style="flex: 1;"><?php include('./partials/sidebar.php') ?></div>
-    <form action='' class='flex-2 border rounded p-3 pt-5 ms-3 form-style' method='POST' style="flex: 3;">
+    <div class="profile-left"><?php include('./partials/sidebar.php') ?></div>
+    <form action='' class='border rounded p-3 pt-5 ms-3 form-style' method='POST' style="flex: 3;">
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>

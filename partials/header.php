@@ -94,13 +94,25 @@ if (isset($_SESSION['user'])) {
         h4,
         h5,
         h6 {
-            font-weight: bold;
+            /* font-weight: bold; */
             margin: 0px;
             padding: 0px;
         }
 
+        nav {
+            background-color: white;
+        }
+
+        nav a {
+            color: #212529;
+        }
+
+        form a {
+            text-decoration: underline;
+        }
+
         .form-style {
-            width: 60%;
+            width: 500px;
 
             @media (max-width: 991px) {
                 width: 100%;
@@ -140,11 +152,11 @@ if (isset($_SESSION['user'])) {
             font-size: 20px;
             margin-top: -3px;
             margin-right: 10px;
-            color: #1976D2;
+            color: #212529;
         }
 
         .sidebar li .a {
-            color: #1976D2;
+            color: #212529;
 
             @media (max-width: 400px) {
                 display: none;
@@ -176,17 +188,93 @@ if (isset($_SESSION['user'])) {
                 height: 100px;
             }
         }
+
+        .btn-primary {
+            background-color: #212529;
+            border-color: #212529;
+            color: white;
+            outline: none;
+            /* Remove the default blue outline */
+        }
+
+        .btn-primary:hover {
+            background-color: #36454F;
+            border-color: #36454F;
+            color: white;
+        }
+
+        .btn-primary:active {
+            background-color: #36454F !important;
+            border-color: #36454F !important;
+            color: white !important;
+        }
+
+        a {
+            color: #212529;
+        }
+
+        .flex-items1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            @media (max-width: 991px) {
+                display: block;
+            }
+        }
+
+        .flex-items {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            @media (max-width: 991px) {
+                flex-direction: column-reverse;
+            }
+        }
+
+        .inner-footer {
+            display: flex;
+            justify-content: space-between;
+
+            @media (max-width: 991px) {
+                display: block;
+            }
+        }
+
+
+        .flex-items1 .content1 {
+            margin-left: 30px;
+            text-align: justify;
+
+            @media (max-width: 991px) {
+                margin-left: 0px;
+                margin-top: 20px;
+            }
+        }
+
+        .flex-items .content {
+            margin-right: 30px;
+            text-align: justify;
+
+            @media (max-width: 991px) {
+                margin-right: 0px;
+                margin-bottom: 20px;
+                flex-direction: column-reverse;
+                margin-top: 20px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <!-- navbar -->
-    <nav class="navbar navbar-expand-lg bg-primary py-3 fixed-top">
+    <nav class="navbar navbar-expand-lg py-3 fixed-top shadow">
         <div class="container">
             <!-- navbar brand / title -->
             <a href='/php_ecommerce/' class='text-decoration-none'>
-                <h2 class='m-0 p-0 text-light'>PhP_Ecomm</h2>
+                <h2 class='m-0 p-0'>Tech360</h2>
             </a>
             <!-- toggle button for mobile nav -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -196,15 +284,16 @@ if (isset($_SESSION['user'])) {
             <!-- navbar links -->
             <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a href="/php_ecommerce/" class="nav-link text-light text-decoration-none mt-1 me-3">Home</a></li>
-                    <li class="nav-item"><a href="/php_ecommerce/#categories" class="nav-link text-light text-decoration-none mt-1 me-3">Categories</a></li>
+                    <li class="nav-item"><a href="/php_ecommerce/" class="nav-link text-decoration-none mt-1 me-3">Home</a></li>
+                    <li class="nav-item"><a href="/php_ecommerce/#categories" class="nav-link text-decoration-none mt-1 me-3">Categories</a></li>
+                    <li class="nav-item"><a href="/php_ecommerce/blogs.php" class="nav-link text-decoration-none mt-1 me-3">Blog</a></li>
                     <?php if (isset($_SESSION['user'])) : ?>
-                        <li class="nav-item"><a href="/php_ecommerce/dashboard.php" class="nav-link text-light text-decoration-none mt-1 me-3">Dashboard</a></li>
-                        <li class="nav-item"><a href="/php_ecommerce/logout.php" class="nav-link text-light text-decoration-none mt-1 me-3">Logout</a></li>
-                        <li class="nav-item"><a href='/php_ecommerce/cart.php' class="text-light text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: -15px; right: -10px; background: red; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"><?php echo isset($uniqueProductIds) ? count($uniqueProductIds) : 0 ?></span></a></li>
+                        <li class="nav-item"><a href="/php_ecommerce/dashboard.php" class="nav-link text-decoration-none mt-1 me-3">Dashboard</a></li>
+                        <li class="nav-item"><a href="/php_ecommerce/logout.php" class="nav-link text-decoration-none mt-1 me-3">Logout</a></li>
+                        <li class="nav-item"><a href='/php_ecommerce/cart.php' class="text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: -15px; right: -10px; background: red; color: white; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"><?php echo isset($uniqueProductIds) ? count($uniqueProductIds) : 0 ?></span></a></li>
                     <?php else : ?>
-                        <li class="nav-item"><a href="register.php" class="nav-link text-light text-decoration-none mt-1 me-3">Register</a></li>
-                        <li class="nav-item"><a href="login.php" class="nav-link text-light text-decoration-none mt-1 me-3">Login</a></li>
+                        <li class="nav-item"><a href="register.php" class="nav-link text-decoration-none mt-1 me-3">Register</a></li>
+                        <li class="nav-item"><a href="login.php" class="nav-link text-decoration-none mt-1 me-3 btn btn-primary px-3">Login</a></li>
                     <?php endif ?>
                 </ul>
             </div>

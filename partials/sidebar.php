@@ -5,6 +5,7 @@
                 <spapn class="a">Admin</spapn>
             </a></li>
         <li><a href="/php_ecommerce/admin/upload_product.php"><i class="bi bi-cloud-arrow-up"></i><span class="a">Upload Product</span></a></li>
+        <li><a href="/php_ecommerce/admin/create_blog.php"><i class="bi bi-pencil-square"></i></i><span class="a">Create Blog</span></a></li>
     <?php endif ?>
     <li><a href="/php_ecommerce/profile.php"><i class="bi bi-person-circle"></i><span class="a">Profile</span></a></li>
     <li><a href="/php_ecommerce/settings.php"><i class="bi bi-gear"></i><span class="a">Settings</span></a></li>

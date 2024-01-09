@@ -1,5 +1,6 @@
 <?php
 
+ob_start();
 include('admincheck.php');
 include('../config/db.php');
 include('../partials/header.php');
@@ -55,6 +56,8 @@ if (isset($_POST['submit'])) {
         }
     }
 }
+
+ob_end_flush();
 
 ?>
 
