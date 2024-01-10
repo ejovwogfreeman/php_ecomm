@@ -1,5 +1,4 @@
 <?php
-
 include('./config/session.php');
 include('./config/db.php');
 include('./partials/header.php');
@@ -14,7 +13,6 @@ if (isset($_SESSION['user'])) {
     $address = $user['address'];
 }
 
-
 ?>
 
 <div class="container d-flex" style="margin-top: 100px;">
@@ -23,16 +21,22 @@ if (isset($_SESSION['user'])) {
         <h3 class="mb-3 text-center">YOUR PROFILE</h3>
         <?php
         $imageData = $user['profile_picture'];
-        $imageInfo = getimagesizefromstring($imageData);
 
-        if ($imageInfo !== false) {
-            $imageFormat = $imageInfo['mime'];
-            $img_src = "data:$imageFormat;base64," . base64_encode($imageData);
+        if (!empty($imageData)) {
+            $imageInfo = getimagesizefromstring($imageData);
+
+            if ($imageInfo !== false) {
+                $imageFormat = $imageInfo['mime'];
+                $img_src = "data:$imageFormat;base64," . base64_encode($imageData);
+            } else {
+                echo "Unable to determine image type.";
+            }
         } else {
-            echo "Unable to determine image type.";
+            // If no image is available, use the default image
+            $img_src = "images/default.jpg";
         }
         ?>
-        <?php echo isset($img_src) ? '<img class="profile-image" src="' . $img_src . '" alt="' . $user['username'] . '">' : '<img class="profile-image" src="images/default.jpg" alt="">'; ?>
+        <img class="profile-image" src="<?php echo $img_src; ?>" alt="<?php echo $user['username']; ?>">
         <div class="mt-3">
             <strong class="d-block mt-2">First Name:</strong>
             <span class="d-block"><?php echo $firstName ?></span>

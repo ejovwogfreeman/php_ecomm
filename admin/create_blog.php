@@ -70,7 +70,7 @@ ob_end_flush();
         <?php endif ?>
         <h4 class=" mb-3">CREATE A BLOG POST</h4>
         <div class="form-group mb-3">
-            <label class="mb-2" for="title">Blog Title</label>
+            <label class="mb-2" for="title">Blog Title:</label>
             <input type="text" class="form-control" name="title" id="title" value="<?php echo $title ?>">
         </div>
 

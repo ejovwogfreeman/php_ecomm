@@ -86,7 +86,7 @@ ob_end_flush();
 
 <div class="container" style="margin-top: 100px;">
 
-    <form action="update_product.php" class='border rounded p-3 pt-5 mt-5 m-auto form-style' method="post" enctype="multipart/form-data">
+    <form action="update_product.php" class='border rounded p-3 pt-5 mt-5 m-auto form-style' method="POST" enctype="multipart/form-data">
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
