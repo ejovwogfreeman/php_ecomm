@@ -5,6 +5,11 @@ session_start();
 include('./config/db.php');
 include('./partials/header.php');
 
+if (isset($_SESSION['user'])) {
+    header('Location: dashboard.php');
+}
+
+
 $email = $password  = $Err = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -60,7 +65,7 @@ ob_end_flush();
 ?>
 
 <div class="container" style="margin-top: 100px;">
-    <?php if (isset($_GET['message'])) : ?>
+    <?php if (isset($_GET['message']) && (!isset($Err) || $Err === '')) : ?>
         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
             <strong><?php echo $_GET['message'] ?></strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
@@ -68,6 +73,7 @@ ob_end_flush();
             </button>
         </div>
     <?php endif ?>
+
     <form action="" class='border rounded p-3 pt-5 mt-5 m-auto form-style' method='POST'>
         <?php if ($Err) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">

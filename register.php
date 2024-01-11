@@ -1,7 +1,16 @@
 <?php
 
+ob_start();
 include('./config/db.php');
 include('./partials/header.php');
+include 'mail.php';
+
+if (isset($_SESSION['user'])) {
+    header('Location: dashboard.php');
+}
+
+$emailSubject = 'WELCOME ON BOARD';
+$htmlFilePath = './html_mails/register.html';
 
 $firstName = $lastName = $email = $password = $confirmPassword = $Err = '';
 
@@ -28,30 +37,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if (strlen($password) < 8) {
                             $Err = 'PASSWORD MUST BE ATLEAST 8 CHARACTERS LONG';
                         } else {
-                            $confirmPassword = $_POST['confirmPassword'];
-                            if ($password !== $confirmPassword) {
-                                $Err = 'PASSWORDS DO NOT MATCH';
+                            if (empty($_POST['confirmPassword'])) {
+                                $Err = 'PASSWORD ENTER PASSWORD CONFIRMATION';
                             } else {
-                                $encrypted_password = hash('md5', $password);
-
-                                $username = explode('@', $email)[0];
-
-                                $check_email = "SELECT * FROM users WHERE email = '$email'";
-
-                                $check_email_query = mysqli_query($conn, $check_email);
-
-                                $currentDateTime = date('Y-m-d H:i:s');
-
-                                if (mysqli_num_rows($check_email_query) > 0) {
-                                    $Err = "A USER WITH THIS EMAIL ALREADY EXISTS";
+                                $confirmPassword = $_POST['confirmPassword'];
+                                if ($password !== $confirmPassword) {
+                                    $Err = 'PASSWORDS DO NOT MATCH';
                                 } else {
-                                    $sql = "INSERT INTO users (username, first_name, last_name, password, email, is_admin, date_joined) values ('$username', '$firstName', '$lastName', '$encrypted_password', '$email', 'false', '$currentDateTime')";
+                                    $encrypted_password = hash('md5', $password);
 
-                                    $sql_query = mysqli_query($conn, $sql);
+                                    $username = explode('@', $email)[0];
 
-                                    if ($sql_query) {
-                                        $message = 'Account Created for ' . $username . ' Successfully!';
-                                        header('Location: login.php?message=' . urldecode($message));
+                                    $check_email = "SELECT * FROM users WHERE email = '$email'";
+
+                                    $check_email_query = mysqli_query($conn, $check_email);
+
+                                    $currentDateTime = date('Y-m-d H:i:s');
+
+                                    if (mysqli_num_rows($check_email_query) > 0) {
+                                        $Err = "A USER WITH THIS EMAIL ALREADY EXISTS";
+                                    } else {
+                                        $sql = "INSERT INTO users (username, first_name, last_name, password, email, is_admin, date_joined) values ('$username', '$firstName', '$lastName', '$encrypted_password', '$email', 'false', '$currentDateTime')";
+
+                                        $sql_query = mysqli_query($conn, $sql);
+
+                                        if ($sql_query) {
+                                            $message = 'Account Created for ' . $username . ' Successfully!';
+                                            // sendEmail($email, $emailSubject, $htmlFilePath);
+                                            sendEmail($email, $emailSubject, $htmlFilePath, $email);
+                                            header('Location: login.php?message=' . urldecode($message));
+                                        }
                                     }
                                 }
                             }
@@ -63,8 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-
-
+ob_end_flush();
 
 ?>
 

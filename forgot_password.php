@@ -1,81 +1,82 @@
 <?php
 
+ob_start();
+session_start();
 include('./config/db.php');
 include('./partials/header.php');
+include 'mail.php';
+
+if (isset($_SESSION['user'])) {
+    header('Location: dashboard.php');
+}
+
+$emailSubject = 'RESET PASSWORD';
+$htmlFilePath = './html_mails/reset_password.html';
 
 $firstName = $lastName = $email = $password = $confirmPassword = $Err = '';
 
+if (isset($_GET['message'])) {
+    $message = $_GET['message'];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (empty($_POST['firstName'])) {
-        $Err = 'PLEASE ENTER FIRST NAME';
+    if (empty($_POST['email'])) {
+        $Err = 'PLEASE ENTER EMAIL';
     } else {
-        $firstName = htmlspecialchars($_POST['firstName']);
-        if (empty($_POST['lastName'])) {
-            $Err = 'PLEASE ENTER LAST NAME';
+        $email = htmlspecialchars($_POST['email']);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $Err = 'PLEASE ENTER A VALID EMAIL';
         } else {
-            $lastName = htmlspecialchars($_POST['lastName']);
-            if (empty($_POST['email'])) {
-                $Err = 'PLEASE ENTER EMAIL';
-            } else {
-                $email = htmlspecialchars($_POST['email']);
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $Err = 'PLEASE ENTER A VALID EMAIL';
+            $email = mysqli_real_escape_string($conn, $email);
+
+            $sql_email = "SELECT * FROM users WHERE email = '$email'";
+
+            $sql_email_query = mysqli_query($conn, $sql_email);
+
+            if ($sql_email_query) {
+
+                if (mysqli_num_rows($sql_email_query) > 0) {
+
+                    $user = mysqli_fetch_assoc($sql_email_query);
+
+                    sendEmail($email, $emailSubject, $htmlFilePath, $email);
+
+                    $message = "An email has been sent to your email \"$email\" with a link to reset your password";
+
+                    header('Location: forgot_password.php?message=' . urldecode($message));
                 } else {
-                    if (empty($_POST['password'])) {
-                        $Err = 'PLEASE ENTER A PASSWORD';
-                    } else {
-                        $password = $_POST['password'];
-                        if (strlen($password) < 8) {
-                            $Err = 'PASSWORD MUST BE ATLEAST 8 CHARACTERS LONG';
-                        } else {
-                            $confirmPassword = $_POST['confirmPassword'];
-                            if ($password !== $confirmPassword) {
-                                $Err = 'PASSWORDS DO NOT MATCH';
-                            } else {
-                                $encrypted_password = hash('md5', $password);
-
-                                $username = explode('@', $email)[0];
-
-                                $check_email = "SELECT * FROM users WHERE email = '$email'";
-
-                                $check_email_query = mysqli_query($conn, $check_email);
-
-                                if (mysqli_num_rows($check_email_query) > 0) {
-                                    $Err = "A USER WITH THIS EMAIL ALREADY EXISTS";
-                                } else {
-                                    $sql = "INSERT INTO users (username, first_name, last_name, password, email, is_admin) values ('$username', '$firstName', '$lastName', '$encrypted_password', '$email', 'false')";
-
-                                    $sql_query = mysqli_query($conn, $sql);
-
-                                    if ($sql_query) {
-                                        $message = 'Account Created for ' . $username . ' Successfully!';
-                                        header('Location: login.php?message=' . urldecode($message));
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    $Err = "A USER WITH THIS EMAIL DOES NOT EXIST";
                 }
+
+                mysqli_free_result($sql_email_query);
+            } else {
+                echo "Error: " . mysqli_error($conn);
             }
         }
     }
 }
-
-
-
+ob_end_flush();
 
 ?>
 
 <div class="container" style="margin-top: 100px;">
     <form action='' class='border rounded p-3 pt-5 mt-5 m-auto form-style' method='POST'>
-        <?php if ($Err) : ?>
+        <?php if (isset($Err) && $Err !== '') : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong><?php echo $Err ?></strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
             </div>
+        <?php elseif (isset($message) && $message !== '') : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong><?php echo $message ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
         <?php endif ?>
+
         <h4 class="mb-3">FORGOT PASSWORD</h4>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Your Email</label>

@@ -1,57 +1,62 @@
 <?php
 
+ob_start();
 include('./config/session.php');
 include('./config/db.php');
 include('./partials/header.php');
 
-$firstName = $lastName = $email = $password = $confirmPassword = $Err = '';
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'][0];
+    $id = $user['user_id'];
+    $encryptedPassword = $user['password'];
+}
+
+$oldPassword = $newPassword = $confirmPassword = $Err = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (empty($_POST['firstName'])) {
-        $Err = 'PLEASE ENTER FIRST NAME';
+    if (empty($_POST['oldPassword'])) {
+        $Err = 'PLEASE ENTER OLD PASSWORD';
     } else {
-        $firstName = htmlspecialchars($_POST['firstName']);
-        if (empty($_POST['lastName'])) {
-            $Err = 'PLEASE ENTER LAST NAME';
+        $oldPassword = htmlspecialchars($_POST['oldPassword']);
+        $encrypted = hash('md5', $oldPassword);
+        if ($encrypted !== $encryptedPassword) {
+            $Err = 'PASSWORD IS NOT THE SAME AS THE OLD PASSWORD';
         } else {
-            $lastName = htmlspecialchars($_POST['lastName']);
-            if (empty($_POST['email'])) {
-                $Err = 'PLEASE ENTER EMAIL';
+            if (empty($_POST['newPassword'])) {
+                $Err = 'PLEASE ENTER YOUR NEW PASSWORD';
             } else {
-                $email = htmlspecialchars($_POST['email']);
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $Err = 'PLEASE ENTER A VALID EMAIL';
+                $newPassword = $_POST['newPassword'];
+                if (strlen($newPassword) < 8) {
+                    $Err = 'PASSWORD MUST BE AT LEAST 8 CHARACTERS LONG';
                 } else {
-                    if (empty($_POST['password'])) {
-                        $Err = 'PLEASE ENTER A PASSWORD';
+                    $encrypted_password = hash('md5', $newPassword);
+                    if ($encrypted_password === $encryptedPassword) {
+                        $Err = 'YOUR NEW PASSWORD CANNOT BE THESAME AS YOUR OLD PASSORD';
                     } else {
-                        $password = $_POST['password'];
-                        if (strlen($password) < 8) {
-                            $Err = 'PASSWORD MUST BE ATLEAST 8 CHARACTERS LONG';
+                        if (empty($_POST['confirmPassword'])) {
+                            $Err = 'PASSWORD ENTER PASSWORD CONFIRMATION';
                         } else {
                             $confirmPassword = $_POST['confirmPassword'];
-                            if ($password !== $confirmPassword) {
+                            if ($newPassword !== $confirmPassword) {
                                 $Err = 'PASSWORDS DO NOT MATCH';
                             } else {
-                                $encrypted_password = hash('md5', $password);
 
-                                $username = explode('@', $email)[0];
+                                $userId = $_POST['id'];
 
-                                $check_email = "SELECT * FROM users WHERE email = '$email'";
+                                $sql = "UPDATE users SET password = '$encrypted_password' WHERE user_id = '$userId'";
 
-                                $check_email_query = mysqli_query($conn, $check_email);
+                                $sql_query = mysqli_query($conn, $sql);
 
-                                if (mysqli_num_rows($check_email_query) > 0) {
-                                    $Err = "A USER WITH THIS EMAIL ALREADY EXISTS";
+                                if ($sql_query) {
+                                    // Update session information
+                                    $_SESSION['user'][0]['password'] = $encrypted_password;
+
+                                    $message = 'Password Updated Successfully!';
+
+                                    header('Location: index.php?message=' . urldecode($message));
+                                    exit();
                                 } else {
-                                    $sql = "INSERT INTO users (username, first_name, last_name, password, email, is_admin) values ('$username', '$firstName', '$lastName', '$encrypted_password', '$email', 'false')";
-
-                                    $sql_query = mysqli_query($conn, $sql);
-
-                                    if ($sql_query) {
-                                        $message = 'Account Created for ' . $username . ' Successfully!';
-                                        header('Location: login.php?message=' . urldecode($message));
-                                    }
+                                    $Err = 'Error updating password: ' . mysqli_error($conn);
                                 }
                             }
                         }
@@ -61,9 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
-
-
+ob_end_flush();
 
 ?>
 
@@ -79,13 +82,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif ?>
         <h4 class="mb-3">CHANGE PASSWORD</h4>
+        <input type="text" class="form-control" name="id" id="id" value="<?php echo $id ?>" hidden>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Old Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='oldPassword' value="<?php echo $oldPassword ?>">
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">New Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='newPassword' value="<?php echo $newPassword ?>">
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Comnfirm New Password</label>
