@@ -86,11 +86,17 @@ ob_end_flush();
         <h4 class="mb-3">LOGIN TO CONTINUE SHOPPING</h4>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Email</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-envelope"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
+            </div>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-key"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
+            </div>
         </div>
         <button class='btn btn-primary mb-2'>LOGIN</button>
         <p class="mb-0">New here? <a href="register.php">create an account</a></p>

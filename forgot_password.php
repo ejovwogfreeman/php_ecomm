@@ -80,7 +80,10 @@ ob_end_flush();
         <h4 class="mb-3">FORGOT PASSWORD</h4>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Your Email</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your registered email" name='email' value="<?php echo $email ?>">
+            <div class="input-group flex-nowrap mb-3">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-envelope"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your registered email" name='email' value="<?php echo $email ?>">
+            </div>
         </div>
         <button class='btn btn-primary mb-2'>FORGOT PASSWORD</button>
         <p class="mb-0">Back to <a href="login.php">Login</a></p>

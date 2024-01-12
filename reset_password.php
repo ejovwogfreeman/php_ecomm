@@ -104,11 +104,17 @@ ob_end_flush();
         <input type="text" class="form-control" name="id" id="id" value="<?php echo $id ?>" hidden>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">New Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='newPassword' value="<?php echo $newPassword ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-key"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='newPassword' value="<?php echo $newPassword ?>">
+            </div>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Comnfirm New Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter password again" name='confirmPassword' value="<?php echo $confirmPassword ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-key"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter password again" name='confirmPassword' value="<?php echo $confirmPassword ?>">
+            </div>
         </div>
         <button class='btn btn-primary mb-2'>RESET PASSWORD</button>
     </form>

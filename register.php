@@ -95,23 +95,38 @@ ob_end_flush();
         <h4 class="mb-3">REGISTER TO START SHOPPING</h4>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your firstname" name='firstName' value="<?php echo $firstName ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-person"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your firstname" name='firstName' value="<?php echo $firstName ?>">
+            </div>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your lastname" name='lastName' value="<?php echo $lastName ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-person"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your lastname" name='lastName' value="<?php echo $lastName ?>">
+            </div>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Email</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-envelope"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email" name='email' value="<?php echo $email ?>">
+            </div>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-key"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your password" name='password' value="<?php echo $password ?>">
+            </div>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Comnfirm Password</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter password again" name='confirmPassword' value="<?php echo $confirmPassword ?>">
+            <div class="input-group flex-nowrap mb-4">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-key"></i></span>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter password again" name='confirmPassword' value="<?php echo $confirmPassword ?>">
+            </div>
         </div>
         <button class='btn btn-primary mb-2'>REGISTER</button>
         <p class="mb-0">Already have an account? <a href="login.php">Login here</a></p>
