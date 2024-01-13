@@ -55,7 +55,7 @@ $blogs = mysqli_fetch_all($sql_query, MYSQLI_ASSOC);
     </div>
     <?php if (!empty($blogs)) : ?>
         <?php foreach ($blogs as $blog) : ?>
-            <div class="border shadow rounded mb-4">
+            <div class="border shadow-sm rounded mb-4">
                 <div class="d-block d-lg-flex align-items-center">
                     <?php
                     $imageData = $blog['blog_image'];

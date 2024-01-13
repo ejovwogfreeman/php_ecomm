@@ -1,5 +1,4 @@
 <?php
-
 include('./config/session.php');
 include('./config/db.php');
 include('./partials/header.php');
@@ -22,35 +21,85 @@ if (isset($_SESSION['user'])) {
         $counter = 1;
     }
 }
+
+$buttonColor = '';
+$buttonText = '';
+
+switch ($order['status']) {
+    case 'Pending':
+        $buttonColor = 'btn-outline-info';
+        $buttonText = 'Process Order';
+        break;
+    case 'Processing':
+        $buttonColor = 'btn-outline-success';
+        $buttonText = 'Confirm Order';
+        break;
+    case 'Confirmed':
+        $buttonColor = 'btn-success';
+        $buttonText = 'Confirmed';
+        break;
+    case 'Cancelled':
+        $buttonColor = 'btn-outline-success';
+        $buttonText = 'Confirm Order';
+        break;
+}
+
+$cancelButtonText = 'Cancel Order';
+$cancelButtonColor = 'btn-outline-danger';
+
+// Check the order status and update button text accordingly
+switch ($order['status']) {
+    case 'Processing':
+    case 'Pending':
+    case 'Confirmed':
+        $cancelButtonText = 'Cancel Order';
+        $cancelButtonColor = 'btn-outline-danger';
+        break;
+    case 'Cancelled':
+        $cancelButtonText = 'Cancelled';
+        $cancelButtonColor = 'btn-danger';
+        break;
+}
+
+// Check if the order is Confirmed or Cancelled
+$isConfirmed = $order['status'] === 'Confirmed';
+$isCancelled = $order['status'] === 'Cancelled';
 ?>
 
 <style>
     strong {
         width: 150px;
     }
+
+    .disabled-link {
+        cursor: not-allowed;
+    }
 </style>
 
 <div class="container" style="margin-top: 100px;">
 
-    <div class=" my-3">
-        <a href="dashboard.php" style="font-size: 30px;"><i class="bi bi-arrow-left-circle-fill"></i></a>
+    <div class="my-3 d-flex align-items-center justify-content-between">
+        <a href="orders.php" style="font-size: 30px;"><i class="bi bi-arrow-left-circle-fill"></i></a>
+        <div>
+            <?php if (isset($_SESSION['user']) && $_SESSION['user'][0]['is_admin'] === 'true') : ?>
+                <a href=<?php echo "/php_ecommerce/admin/change_order_status.php?id={$order['order_id']}" ?> class="btn <?php echo $buttonColor; ?> <?php echo $isConfirmed ? 'disabled-link' : ''; ?>"><?php echo $buttonText; ?></a>
+            <?php endif ?>
+            <a href=<?php echo "/php_ecommerce/cancel_order.php?id={$order['order_id']}" ?> class="btn <?php echo $cancelButtonColor; ?> <?php echo $isCancelled ? 'disabled-link' : ''; ?>"><?php echo $cancelButtonText; ?></a>
+        </div>
     </div>
 
     <div class="border rounded p-3">
-        <div class="d-flex align-items-center justify-content-between">
-            <h3>Order Details - Order #<?php echo $orderId; ?></h3>
-            <?php if (isset($_SESSION['user']) && $_SESSION['user'][0]['is_admin'] === 'true') : ?>
-                <a href=<?php echo "/php_ecommerce/admin/confirm_order.php?id={$order['order_id']}" ?> class="btn btn-outline-success">Confirm Order</a>
-            <?php endif ?>
-        </div>
+        <h3>Order Details - Order #<?php echo $orderId; ?></h3>
         <div class="mt-3">
             <p class="d-flex"><strong>Phone Number: </strong> <span><?php echo $order['phone_number']; ?></span></p>
             <p class="d-flex"><strong>Shipping Address:</strong> <span><?php echo $order['shipping_address']; ?></span></p>
             <p class="d-flex"><strong>Total Price (NGN):</strong> <span><?php echo number_format($order['total_price']); ?></span></p>
             <p class="d-flex"><strong>Date Ordered:</strong> <span><?php echo $order['date_ordered']; ?></span></p>
             <p class="d-flex"><strong>Status:</strong>
-                <small class="<?php echo $order['status'] === 'Processing' ? 'bg-warning' : 'bg-success'; ?> text-light p-1 rounded">
-                    <?php echo ucfirst($order['status']); ?>
+                <small class="<?php
+                                echo $order['status'] === 'Pending' ? 'bg-warning' : ($order['status'] === 'Processing' ? 'bg-info' : ($order['status'] === 'Confirmed' ? 'bg-success' : ($order['status'] === 'Cancelled' ? 'bg-danger' : '')));
+                                ?> text-light p-1 rounded">
+                    <?php echo ($order['status']); ?>
                 </small>
             </p>
         </div>
@@ -86,3 +135,31 @@ if (isset($_SESSION['user'])) {
 </div>
 
 <?php include('./partials/footer.php'); ?>
+
+<script>
+    // Disable links on page load if order is Confirmed or Cancelled
+    window.onload = function() {
+        <?php if ($isConfirmed || $isCancelled) : ?>
+            disableLinks();
+        <?php endif; ?>
+    };
+
+    function disableLinks() {
+        var confirmLink = document.querySelector('.btn-success');
+        var cancelLink = document.querySelector('.btn-danger');
+
+        if (confirmLink) {
+            confirmLink.classList.add('disabled-link');
+            confirmLink.onclick = function() {
+                return false;
+            };
+        }
+
+        if (cancelLink) {
+            cancelLink.classList.add('disabled-link');
+            cancelLink.onclick = function() {
+                return false;
+            };
+        }
+    }
+</script>

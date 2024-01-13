@@ -9,14 +9,21 @@ if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'][0];
     $username = $user['username'];
 
-    // Fetch all orders of the user from the database
-    $sql = "SELECT * FROM orders ORDER BY date_ordered DESC";
+    // Fetch all users of the user from the database
+    $sql = "SELECT * FROM users ORDER BY user_id DESC";
     $result = mysqli_query($conn, $sql);
-    $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     $counter = 1;
 }
 ?>
+
+<style>
+    small a {
+        padding: 1px 3px !important;
+        font-size: 12px !important;
+    }
+</style>
 
 <!-- <div class="container" style="margin-top: 100px;"> -->
 <div class="container d-flex" style="margin-top: 100px;">
@@ -37,42 +44,36 @@ if (isset($_SESSION['user'])) {
                 </button>
             </div>
         <?php endif ?>
-        <h3 class="mb-3">All Orders</h3>
-        <?php if (!empty($orders)) : ?>
+        <h3 class="mb-3">All Users</h3>
+        <?php if (!empty($users)) : ?>
             <div class="table-responsive">
                 <table class="table text-center">
                     <thead>
                         <tr>
                             <th scope="col">S/N</th>
-                            <th scope="col">Shipping Address</th>
-                            <th scope="col">Total Price (NGN)</th>
-                            <th scope="col">Date Ordered</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Order Details</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Date Joined</th>
+                            <th scope="col">View Profile</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($orders as $order) : ?>
+                        <?php foreach ($users as $user) : ?>
                             <tr>
                                 <th scope="row"><?php echo $counter++ ?></th>
-                                <td><?php echo $order['shipping_address']; ?></td>
-                                <td><?php echo number_format($order['total_price']); ?></td>
-                                <td><?php echo $order['date_ordered']; ?></td>
-                                <td>
-                                    <small class="<?php
-                                                    echo $order['status'] === 'Pending' ? 'bg-warning' : ($order['status'] === 'Processing' ? 'bg-info' : ($order['status'] === 'Confirmed' ? 'bg-success' : ($order['status'] === 'Cancelled' ? 'bg-danger' : '')));
-                                                    ?> text-light p-1 rounded">
-                                        <?php echo ($order['status']); ?>
-                                    </small>
-                                </td>
-                                <td><small class="bg-primary text-light p-1 rounded"> <a href=<?php echo "/php_ecommerce/order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a></small></td>
+                                <td><?php echo $user['first_name']; ?></td>
+                                <td><?php echo $user['last_name']; ?></td>
+                                <td><?php echo $user['email']; ?></td>
+                                <td><?php echo $user['date_joined']; ?></td>
+                                <td><small><a href="/php_ecommerce/profile.php?id=<?php echo $user['user_id']; ?>" class="btn btn-outline-info">View Profile</a></small></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         <?php else : ?>
-            <p class="mt-3">No orders found in order history.</p>
+            <p class="mt-3">No users found in order history.</p>
         <?php endif; ?>
     </div>
 </div>

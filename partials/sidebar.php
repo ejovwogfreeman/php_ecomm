@@ -1,8 +1,12 @@
 <ul class="sidebar rounded border">
     <li><a href="/php_ecommerce/dashboard.php"><i class="bi bi-speedometer"></i><span class="a">Dashboard</span></a></li>
+    <li><a href="/php_ecommerce/orders.php"><i class="bi bi-cart-check"></i><span class="a">Orders</span></a></li>
     <?php if (isset($_SESSION['user']) && $_SESSION['user'][0]['is_admin'] === 'true') : ?>
         <li><a href="/php_ecommerce/admin"><i class="bi bi-person-plus"></i>
                 <spapn class="a">Admin</spapn>
+            </a></li>
+        <li><a href="/php_ecommerce/admin/users.php"><i class="bi bi-people"></i>
+                <spapn class="a">Users</spapn>
             </a></li>
         <li><a href="/php_ecommerce/admin/upload_product.php"><i class="bi bi-cloud-arrow-up"></i><span class="a">Upload Product</span></a></li>
         <li><a href="/php_ecommerce/admin/create_blog.php"><i class="bi bi-pencil-square"></i></i><span class="a">Create Blog</span></a></li>

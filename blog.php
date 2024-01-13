@@ -106,8 +106,8 @@ ob_end_flush();
         <div class="mt-4">
             <?php if (!empty($comments)) : ?>
                 <?php foreach ($comments as $comment) : ?>
-                    <div class="border shadow rounded p-3 mb-3">
-                        <small class="m-0"><?php echo "{$comment['commenter_name']} - {$comment['created_at']}"; ?></small>
+                    <div class="border shadow-sm rounded p-3 mb-3">
+                        <small class="m-0"><?php echo "<strong>{$comment['commenter_name']}</strong> - {$comment['created_at']}"; ?></small>
                         <p class="m-0"><?php echo "{$comment['commenter_text']}" ?></p>
                     </div>
                 <?php endforeach; ?>

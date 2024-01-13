@@ -50,7 +50,7 @@ $currentDateTime = date('Y-m-d H:i:s');
 
 if (isset($_GET['status']) && $_GET['status'] === 'completed') {
     // Insert order details into the orders table
-    $status = 'Processing'; // Default status
+    $status = 'Pending'; // Default status
     $sqlOrder = "INSERT INTO orders (user_id, phone_number, shipping_address, total_price, status, date_ordered) VALUES ('$userId', '$phoneNum', '$shippingAddress', $totalPrice, '$status', '$currentDateTime')";
     mysqli_query($conn, $sqlOrder);
 

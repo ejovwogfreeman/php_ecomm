@@ -292,8 +292,8 @@ if (isset($_SESSION['user'])) {
                         <li class="nav-item"><a href="/php_ecommerce/logout.php" class="nav-link text-decoration-none mt-1 me-3">Logout</a></li>
                         <li class="nav-item"><a href='/php_ecommerce/cart.php' class="text-decoration-none" style="position: relative"><i style="font-size: 30px;" class="bi bi-cart"></i><span style="position: absolute; top: -15px; right: -10px; background: red; color: white; display: flex; align-items: center; justify-content: center;  width: 25px; height: 25px; border-radius: 50%"><?php echo isset($uniqueProductIds) ? count($uniqueProductIds) : 0 ?></span></a></li>
                     <?php else : ?>
-                        <li class="nav-item"><a href="register.php" class="nav-link text-decoration-none mt-1 me-3">Register</a></li>
-                        <li class="nav-item"><a href="login.php" class="nav-link text-decoration-none mt-1 me-3 btn btn-primary px-3">Login</a></li>
+                        <li class="nav-item"><a href="/php_ecommerce/register.php" class="nav-link text-decoration-none mt-1 me-3">Register</a></li>
+                        <li class="nav-item"><a href="/php_ecommerce/login.php" class="nav-link text-decoration-none mt-1 me-0 btn btn-primary px-3">Login</a></li>
                     <?php endif ?>
                 </ul>
             </div>

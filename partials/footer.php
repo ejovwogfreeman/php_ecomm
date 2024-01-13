@@ -1,3 +1,73 @@
+<?php
+// Check if the form is submitted
+$email = $message = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Assuming your form has an input named 'email'
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+
+    // Validate email address
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = 'Invalid email address';
+    } else {
+        if ($conn) {
+            // Check if the user exists in the users table
+            $userQuery = "SELECT first_name, last_name FROM users WHERE email = '$email'";
+            $userResult = mysqli_query($conn, $userQuery);
+
+            if ($userResult) {
+                $userDetails = mysqli_fetch_assoc($userResult);
+                $firstName = $userDetails ? $userDetails['first_name'] : ''; // Use ' ' if user doesn't exist
+                $lastName = $userDetails ? $userDetails['last_name'] : ''; // Use ' ' if user doesn't exist
+
+                // Check if the email is already subscribed
+                $checkQuery = "SELECT * FROM newsletters WHERE email = '$email'";
+                $checkResult = mysqli_query($conn, $checkQuery);
+
+                if ($checkResult) {
+                    if (mysqli_num_rows($checkResult) > 0) {
+                        // Email already subscribed
+                        $message = 'Email already subscribed.';
+                    } else {
+                        // Email not subscribed, insert into the newsletters table
+                        $insertQuery = "INSERT INTO newsletters (email, first_name, last_name, date_subscribed) 
+                                        VALUES ('$email', '$firstName', '$lastName', NOW())";
+
+                        $insertResult = mysqli_query($conn, $insertQuery);
+
+                        if ($insertResult) {
+                            $message = 'Subscription has been done Successfully!';
+                            $email = ''; // Clear email field after successful subscription
+                        } else {
+                            // Debugging statement
+                            echo "Insert Error: " . mysqli_error($conn);
+
+                            $message = 'Subscription failed. Please try again later.';
+                        }
+                    }
+                } else {
+                    // Debugging statement
+                    echo "Check Query Error: " . mysqli_error($conn);
+
+                    $message = 'Error checking subscription status. Please try again later.';
+                }
+            } else {
+                // Debugging statement
+                echo "User Query Error: " . mysqli_error($conn);
+
+                $message = 'Error checking user status. Please try again later.';
+            }
+
+            // Close the database connection
+            mysqli_close($conn);
+        } else {
+            $message = 'Error connecting to the database. Please try again later.';
+        }
+    }
+}
+?>
+
+
+
 <style>
     .input {
         width: 50%;
@@ -23,21 +93,24 @@ $marginTopClass = $isIndexPage && !$isAdminPage ? 'mt-0' : 'mt-4';
     <div class="container pt-5 pb-3 inner-footer">
         <ul class="text-start">
             <h5 class="mb-2">Categories</h5>
-            <li><a class="text-light" href="">Electronics</a></li>
-            <li><a class="text-light" href="">Laptops</a></li>
-            <li><a class="text-light" href="">Accessories</a></li>
-            <li><a class="text-light" href="">Phones</a></li>
+            <li><a class="text-light" href="/php_ecommerce/categories.php?category=electronics">Electronics</a></li>
+            <li><a class="text-light" href="/php_ecommerce/categories.php?category=laptops">Laptops</a></li>
+            <li><a class="text-light" href="/php_ecommerce/categories.php?category=accessories">Accessories</a></li>
+            <li><a class="text-light" href="/php_ecommerce/categories.php?category=phones">Phones</a></li>
+            <li><a class="text-light" href="/php_ecommerce/exclusive_deals.php">Phones</a></li>
         </ul>
         <ul class="text-start">
             <h5 class="mb-2">Customer Service</h5>
             <li><a class="text-light" href="">Contact Us</a></li>
-            <li><a class="text-light" href="">FAQ</a></li>
+            <li><a class="text-light" href="">Return Policy</a></li>
             <li><a class="text-light" href="">Give Us Feedback</a></li>
         </ul>
         <ul class="text-start">
             <h5 class="mb-2">About Us</h5>
             <li><a class="text-light" href="">About</a></li>
             <li><a class="text-light" href="">Location</a></li>
+            <li><a class="text-light" href="">FAQ</a></li>
+            <li><a class="text-light" href="">Affiliate</a></li>
             <li><a class="text-light" href="">Contact Us</a></li>
         </ul>
         <ul class="text-start">
@@ -47,14 +120,31 @@ $marginTopClass = $isIndexPage && !$isAdminPage ? 'mt-0' : 'mt-4';
             <li><a class="text-light" href=""><i class="bi bi-twitter"></i><span class="ms-2">Twitter</span></a></li>
         </ul>
         <ul class="text-start">
+            <?php if (isset($message) && (strstr($message, "Successfully") || strstr($message, "SUCCESSFUL")) && $message !== '') : ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><?php echo $message ?></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+            <?php elseif (isset($message) && $message !== '') : ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong><?php echo $message ?></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+            <?php endif ?>
             <h5 class="mb-2">Subscribe to our Newsletter</h5>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">
-                    <i class="bi bi-envelope"></i>
-                </span>
-                <input type="text" class="bg-transparent px-2 input" placeholder="example@gmail.com" aria-label="email" aria-describedby="basic-addon1" style="border: 1px solid white; color: white;">
-                <button class="btn" type="button" style="border: 1px solid white; color: white">SUBSCRIBE</button>
-            </div>
+            <form action="" method="POST">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-envelope"></i>
+                    </span>
+                    <input type="text" class="bg-transparent px-2 input" placeholder="example@gmail.com" aria-label="email" name="email" value="<?php echo $email ?>" aria-describedby="basic-addon1" style="border: 1px solid white; color: white;">
+                    <button class="btn" type="submit" style="border: 1px solid white; color: white">SUBSCRIBE</button>
+                </div>
+            </form>
         </ul>
     </div>
     <p class="m-0">copyright &copy; <?php echo date('Y') ?> Tech360</p>

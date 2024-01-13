@@ -1,26 +1,25 @@
 <?php
 
-include('admincheck.php');
-include('../config/db.php');
-include('../partials/header.php');
+include('./config/session.php');
+include('./config/db.php');
+include('./partials/header.php');
 
 if (isset($_SESSION['user'])) {
     $userId = $_SESSION['user'][0]['user_id'];
-    $user = $_SESSION['user'][0];
-    $username = $user['username'];
 
     // Fetch all orders of the user from the database
-    $sql = "SELECT * FROM orders ORDER BY date_ordered DESC";
+    $sql = "SELECT * FROM orders WHERE user_id = $userId ORDER BY date_ordered DESC";
     $result = mysqli_query($conn, $sql);
     $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    // var_dump($orders);
 
     $counter = 1;
 }
 ?>
 
-<!-- <div class="container" style="margin-top: 100px;"> -->
 <div class="container d-flex" style="margin-top: 100px;">
-    <div class="profile-left"><?php include('../partials/sidebar.php') ?></div>
+    <div class="profile-left"><?php include('./partials/sidebar.php') ?></div>
     <div class='border rounded p-3 pt-5 ms-3 profile' style="flex: 3;" style="overflow-x: scroll;">
         <?php if (isset($_GET['message']) && (strstr($_GET['message'], "Successfully"))  || (isset($_GET['message']) && (strstr($_GET['message'], "SUCCESSFUL")))) : ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -37,7 +36,7 @@ if (isset($_SESSION['user'])) {
                 </button>
             </div>
         <?php endif ?>
-        <h3 class="mb-3">All Orders</h3>
+        <h3 class="mb-3">Your Order History</h3>
         <?php if (!empty($orders)) : ?>
             <div class="table-responsive">
                 <table class="table text-center">
@@ -65,15 +64,16 @@ if (isset($_SESSION['user'])) {
                                         <?php echo ($order['status']); ?>
                                     </small>
                                 </td>
-                                <td><small class="bg-primary text-light p-1 rounded"> <a href=<?php echo "/php_ecommerce/order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a></small></td>
+                                <td><small class="bg-primary text-light p-1 rounded"> <a href=<?php echo "order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a></small></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         <?php else : ?>
-            <p class="mt-3">No orders found in order history.</p>
+            <p class="mt-3">No orders found in your order history.</p>
         <?php endif; ?>
     </div>
 </div>
-<?php include('../partials/footer.php'); ?>
+
+<?php include('./partials/footer.php'); ?>
