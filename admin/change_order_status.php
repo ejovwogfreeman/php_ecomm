@@ -39,9 +39,57 @@ if (isset($_SESSION['user'])) {
                     } else {
                         // Change status to 'Confirmed'
                         $sqlUpdateStatus = "UPDATE orders SET status = 'Confirmed' WHERE order_id = $orderId";
-                        $message = 'Order Confirmed Successfully!';
-                        // Update the order status based on the conditions
-                        mysqli_query($conn, $sqlUpdateStatus);
+
+                        $referee_id = $order['user_id'];
+
+                        $referee_sql = "SELECT * FROM users WHERE user_id = '$referee_id'";
+                        $referee_query = mysqli_query($conn, $referee_sql);
+                        $referee = mysqli_fetch_assoc($referee_query);
+
+                        $referee_username = $referee['username'];
+                        $referrer_code = $referee['referrer_code'];
+
+                        if (!empty($referrer_code)) {
+
+                            $referrer_sql = "SELECT * FROM users WHERE username = '$referrer_code'";
+                            $referrer_query = mysqli_query($conn, $referrer_sql);
+                            $referrer = mysqli_fetch_assoc($referrer_query);
+
+                            $referrer_id = $referrer['user_id'];
+
+                            // Fetch the order items
+                            $sqlOrderItems = "SELECT * FROM order_items WHERE order_id = $orderId";
+                            $resultOrderItems = mysqli_query($conn, $sqlOrderItems);
+                            $orderItems = mysqli_fetch_all($resultOrderItems, MYSQLI_ASSOC);
+
+                            $amount = $order['total_price'];
+
+                            $comission_earned = (5 * $amount) / 100;
+
+                            // Initialize an empty string to store order items
+                            $orderItemsString = '';
+
+                            // Initialize referral_earning of the user;
+                            $referral_earning = (int)$referrer['referral_earning'] + (int)$comission_earned;
+
+                            // Iterate through the order items and concatenate them into a string
+                            foreach ($orderItems as $item) {
+                                $orderItemsString .= "Product: " . $item['product_name'] . ", Quantity: " . $item['quantity'] . ", Amount: " . $item['price_paid'] . "\n";
+                            }
+
+                            // If you want to insert $orderItemsString into another table, you can use an INSERT query
+                            $sqlInsert = "INSERT INTO referral_earnings (referrer_user_id, referrer_code, referee_user_id,  referee_username, amount, comission_earned, description, status, date_earned) VALUES ('$referrer_id', '$referrer_code', '$referee_id', '$referee_username', '$amount', '$comission_earned', '$orderItemsString', 'unpaid', NOW())";
+                            mysqli_query($conn, $sqlInsert);
+
+                            $updateReferralEarning = "UPDATE users SET referral_earning = '$referral_earning' WHERE user_id = $referrer_id";
+                            mysqli_query($conn, $updateReferralEarning);
+
+                            $message = 'Order Confirmed Successfully!';
+                            mysqli_query($conn, $sqlUpdateStatus);
+                        } else {
+                            $message = 'Order Confirmed Successfully!';
+                            mysqli_query($conn, $sqlUpdateStatus);
+                        }
                     }
                     redirectWithMessage($message);
                     break;

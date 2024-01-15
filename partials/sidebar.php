@@ -8,6 +8,15 @@
         <li><a href="/php_ecommerce/admin/users.php"><i class="bi bi-people"></i>
                 <spapn class="a">Users</spapn>
             </a></li>
+        <li><a href="/php_ecommerce/admin/products.php"><i class="bi bi-box-seam"></i>
+                <spapn class="a">Products</spapn>
+            </a></li>
+        <li><a href="/php_ecommerce/admin/blogs.php"><i class="bi bi-journal"></i>
+                <spapn class="a">Blogs</spapn>
+            </a></li>
+        <li><a href="/php_ecommerce/admin/referral_earnings.php"><i class="bi bi-credit-card"></i>
+                <spapn class="a">Earnings</spapn>
+            </a></li>
         <li><a href="/php_ecommerce/admin/upload_product.php"><i class="bi bi-cloud-arrow-up"></i><span class="a">Upload Product</span></a></li>
         <li><a href="/php_ecommerce/admin/create_blog.php"><i class="bi bi-pencil-square"></i></i><span class="a">Create Blog</span></a></li>
     <?php endif ?>

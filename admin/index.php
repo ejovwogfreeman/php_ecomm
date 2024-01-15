@@ -39,41 +39,64 @@ if (isset($_SESSION['user'])) {
         <?php endif ?>
         <h3 class="mb-3">All Orders</h3>
         <?php if (!empty($orders)) : ?>
-            <div class="table-responsive">
-                <table class="table text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col">S/N</th>
-                            <th scope="col">Shipping Address</th>
-                            <th scope="col">Total Price (NGN)</th>
-                            <th scope="col">Date Ordered</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Order Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($orders as $order) : ?>
+            <?php
+            // Group orders by month
+            $groupedOrders = [];
+            foreach ($orders as $order) {
+                $month = date('F Y', strtotime($order['date_ordered']));
+                $groupedOrders[$month][] = $order;
+            }
+            ?>
+
+            <?php foreach ($groupedOrders as $month => $monthOrders) : ?>
+                <h4><?php echo $month; ?></h4>
+                <div class="table-responsive">
+                    <table class="table text-center">
+                        <thead>
                             <tr>
-                                <th scope="row"><?php echo $counter++ ?></th>
-                                <td><?php echo $order['shipping_address']; ?></td>
-                                <td><?php echo number_format($order['total_price']); ?></td>
-                                <td><?php echo $order['date_ordered']; ?></td>
-                                <td>
-                                    <small class="<?php
-                                                    echo $order['status'] === 'Pending' ? 'bg-warning' : ($order['status'] === 'Processing' ? 'bg-info' : ($order['status'] === 'Confirmed' ? 'bg-success' : ($order['status'] === 'Cancelled' ? 'bg-danger' : '')));
-                                                    ?> text-light p-1 rounded">
-                                        <?php echo ($order['status']); ?>
-                                    </small>
-                                </td>
-                                <td><small class="bg-primary text-light p-1 rounded"> <a href=<?php echo "/php_ecommerce/order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a></small></td>
+                                <th scope="col">S/N</th>
+                                <th scope="col">Shipping Address</th>
+                                <th scope="col">Total Price (NGN)</th>
+                                <th scope="col">Date Ordered</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Order Details</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            <?php
+                            // Reset counter at the start of each month
+                            $counter = 1;
+                            ?>
+                            <?php foreach ($monthOrders as $order) : ?>
+                                <tr>
+                                    <th scope="row"><?php echo $counter++ ?></th>
+                                    <td><?php echo $order['shipping_address']; ?></td>
+                                    <td><?php echo number_format($order['total_price']); ?></td>
+                                    <td><?php echo date('M d, Y', strtotime($order['date_ordered'])); ?></td>
+                                    <td>
+                                        <small class="<?php
+                                                        echo $order['status'] === 'Pending' ? 'bg-warning' : ($order['status'] === 'Processing' ? 'bg-info' : ($order['status'] === 'Confirmed' ? 'bg-success' : ($order['status'] === 'Cancelled' ? 'bg-danger' : '')));
+                                                        ?> text-light p-1 rounded">
+                                            <?php echo ($order['status']); ?>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <small class="bg-primary text-light p-1 rounded">
+                                            <a href=<?php echo "order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a>
+                                        </small>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endforeach; ?>
+
+
         <?php else : ?>
-            <p class="mt-3">No orders found in order history.</p>
+            <p class="mt-3">No orders found in Order history.</p>
         <?php endif; ?>
+
     </div>
 </div>
 <?php include('../partials/footer.php'); ?>

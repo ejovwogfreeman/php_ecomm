@@ -5,11 +5,12 @@ include('./partials/header.php');
 
 if (isset($_SESSION['user'])) {
     $userId = $_SESSION['user'][0]['user_id'];
+    $username = $_SESSION['user'][0]['username'];
 
     // Fetch all orders of the user from the database
-    $sql = "SELECT * FROM orders WHERE user_id = $userId ORDER BY date_ordered DESC";
+    $sql = "SELECT * FROM referral_earnings WHERE referrer_code = '$username'";
     $result = mysqli_query($conn, $sql);
-    $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $referrals = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     // var_dump($orders);
 
@@ -35,29 +36,36 @@ if (isset($_SESSION['user'])) {
                 </button>
             </div>
         <?php endif ?>
-        <h3 class="mb-3">Your Order History</h3>
-        <?php if (!empty($orders)) : ?>
+        <h3 class="mb-3">Your Referral/Affiliate Earning</h3>
+
+        <div class="border rounded p-2 mb-3">
+            <div><small class="mb-3">All Time Earning <?php echo getTotalEarningsOfUser() ?></small></div>
+            <div><small class="mb-3">Paid Earning <?php echo getTotalPaidEarningsOfUser() ?></small></div>
+        </div>
+
+        <?php if (!empty($referrals)) : ?>
             <?php
             // Group orders by month
-            $groupedOrders = [];
-            foreach ($orders as $order) {
-                $month = date('F Y', strtotime($order['date_ordered']));
-                $groupedOrders[$month][] = $order;
+            $groupedReferrals = [];
+            foreach ($referrals as $referral) {
+                $month = date('F Y', strtotime($referral['date_earned']));
+                $groupedReferrals[$month][] = $referral;
             }
             ?>
 
-            <?php foreach ($groupedOrders as $month => $monthOrders) : ?>
+            <?php foreach ($groupedReferrals as $month => $monthReferrals) : ?>
                 <h4><?php echo $month; ?></h4>
                 <div class="table-responsive">
                     <table class="table text-center">
                         <thead>
                             <tr>
                                 <th scope="col">S/N</th>
-                                <th scope="col">Shipping Address</th>
-                                <th scope="col">Total Price (NGN)</th>
-                                <th scope="col">Date Ordered</th>
+                                <th scope="col">Referee Username</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Comission Earned</th>
+                                <th scope="col">Date Earned</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Order Details</th>
+                                <th scope="col">View Details</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,22 +73,21 @@ if (isset($_SESSION['user'])) {
                             // Reset counter at the start of each month
                             $counter = 1;
                             ?>
-                            <?php foreach ($monthOrders as $order) : ?>
+                            <?php foreach ($monthReferrals as $referral) : ?>
                                 <tr>
                                     <th scope="row"><?php echo $counter++ ?></th>
-                                    <td><?php echo $order['shipping_address']; ?></td>
-                                    <td><?php echo number_format($order['total_price']); ?></td>
-                                    <td><?php echo date('M d, Y', strtotime($order['date_ordered'])); ?></td>
+                                    <td><?php echo $referral['referee_username']; ?></td>
+                                    <td><?php echo $referral['amount']; ?></td>
+                                    <td><?php echo $referral['comission_earned']; ?></td>
+                                    <td><?php echo date('M d, Y', strtotime($referral['date_earned'])); ?></td>
                                     <td>
-                                        <small class="<?php
-                                                        echo $order['status'] === 'Pending' ? 'bg-warning' : ($order['status'] === 'Processing' ? 'bg-info' : ($order['status'] === 'Confirmed' ? 'bg-success' : ($order['status'] === 'Cancelled' ? 'bg-danger' : '')));
-                                                        ?> text-light p-1 rounded">
-                                            <?php echo ($order['status']); ?>
+                                        <small class="<?php echo $referral['status'] === 'paid' ? 'bg-success' : 'bg-danger'; ?> text-light p-1 rounded">
+                                            <?php echo ($referral['status']); ?>
                                         </small>
                                     </td>
                                     <td>
                                         <small class="bg-primary text-light p-1 rounded">
-                                            <a href=<?php echo "order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a>
+                                            <a href=<?php echo "/php_ecommerce/referral_earning.php?id={$referral['referral_earning_id']}" ?> class="text-decoration-none text-light">View Details</a>
                                         </small>
                                     </td>
                                 </tr>
@@ -92,9 +99,31 @@ if (isset($_SESSION['user'])) {
 
 
         <?php else : ?>
-            <p class="mt-3">No orders found in your order history.</p>
+            <p class="mt-3">No completed orders found in your order history.</p>
         <?php endif; ?>
     </div>
 </div>
 
 <?php include('./partials/footer.php'); ?>
+
+<?php
+function getTotalPaidEarningsOfUser()
+{
+    global $conn;
+    global $userId;
+    $sql = "SELECT SUM(comission_earned) AS totalEarnings FROM referral_earnings WHERE referrer_user_id = $userId AND status = 'paid'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $totalEarnings = 'NGN ' . ($row['totalEarnings'] ?? 0);
+    return $totalEarnings;
+}
+
+function getTotalEarningsOfUser()
+{
+    global $conn;
+    global $userId;
+    $sql = "SELECT * FROM users WHERE user_id = $userId";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    return 'NGN ' . number_format($row['referral_earning']);
+}

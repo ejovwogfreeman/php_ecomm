@@ -88,13 +88,15 @@ $isCancelled = $order['status'] === 'Cancelled';
         </div>
     </div>
 
-    <div class="border rounded p-3">
+    <div class="border rounded p-3 pt-5">
         <h3>Order Details - Order #<?php echo $orderId; ?></h3>
         <div class="mt-3">
             <p class="d-flex"><strong>Phone Number: </strong> <span><?php echo $order['phone_number']; ?></span></p>
             <p class="d-flex"><strong>Shipping Address:</strong> <span><?php echo $order['shipping_address']; ?></span></p>
-            <p class="d-flex"><strong>Total Price (NGN):</strong> <span><?php echo number_format($order['total_price']); ?></span></p>
-            <p class="d-flex"><strong>Date Ordered:</strong> <span><?php echo $order['date_ordered']; ?></span></p>
+            <p class="d-flex"><strong>Total Price:</strong>NGN&nbsp;<span><?php echo number_format($order['total_price']); ?></span></p>
+            <p class="d-flex"><strong>Date Ordered:</strong> <span>
+                    <td><?php echo date('M d, Y', strtotime($order['date_ordered'])); ?></td>
+                </span></p>
             <p class="d-flex"><strong>Status:</strong>
                 <small class="<?php
                                 echo $order['status'] === 'Pending' ? 'bg-warning' : ($order['status'] === 'Processing' ? 'bg-info' : ($order['status'] === 'Confirmed' ? 'bg-success' : ($order['status'] === 'Cancelled' ? 'bg-danger' : '')));

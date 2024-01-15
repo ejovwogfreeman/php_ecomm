@@ -1,33 +1,25 @@
 <?php
-
-include('admincheck.php');
-include('../config/db.php');
-include('../partials/header.php');
+include('./config/session.php');
+include('./config/db.php');
+include('./partials/header.php');
 
 if (isset($_SESSION['user'])) {
     $userId = $_SESSION['user'][0]['user_id'];
-    $user = $_SESSION['user'][0];
-    $username = $user['username'];
+    $username = $_SESSION['user'][0]['username'];
 
-    // Fetch all users of the user from the database
-    $sql = "SELECT * FROM users ORDER BY user_id DESC";
+    // Fetch all orders of the user from the database
+    $sql = "SELECT * FROM referrals WHERE referrer_code = '$username'";
     $result = mysqli_query($conn, $sql);
-    $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $referrals = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    // var_dump($orders);
 
     $counter = 1;
 }
 ?>
 
-<style>
-    small a {
-        padding: 1px 3px !important;
-        font-size: 12px !important;
-    }
-</style>
-
-<!-- <div class="container" style="margin-top: 100px;"> -->
 <div class="container d-flex" style="margin-top: 100px;">
-    <div class="profile-left"><?php include('../partials/sidebar.php') ?></div>
+    <div class="profile-left"><?php include('./partials/sidebar.php') ?></div>
     <div class='border rounded p-3 pt-5 ms-3 profile' style="flex: 3;" style="overflow-x: scroll;">
         <?php if (isset($_GET['message']) && (strstr($_GET['message'], "Successfully"))  || (isset($_GET['message']) && (strstr($_GET['message'], "SUCCESSFUL")))) : ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -44,29 +36,27 @@ if (isset($_SESSION['user'])) {
                 </button>
             </div>
         <?php endif ?>
-        <h3 class="mb-3">All Users</h3>
-        <?php if (!empty($users)) : ?>
+        <h3 class="mb-3">Your Referrals</h3>
+        <?php if (!empty($referrals)) : ?>
             <?php
             // Group orders by month
-            $groupedOrders = [];
-            foreach ($users as $user) {
-                $month = date('F Y', strtotime($user['date_joined']));
-                $groupedUsers[$month][] = $user;
+            $groupedReferrals = [];
+            foreach ($referrals as $referral) {
+                $month = date('F Y', strtotime($referral['referral_date']));
+                $groupedReferrals[$month][] = $referral;
             }
             ?>
 
-            <?php foreach ($groupedUsers as $month => $monthUsers) : ?>
+            <?php foreach ($groupedReferrals as $month => $monthReferrals) : ?>
                 <h4><?php echo $month; ?></h4>
                 <div class="table-responsive">
                     <table class="table text-center">
                         <thead>
                             <tr>
                                 <th scope="col">S/N</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Date Joined</th>
-                                <th scope="col">View Profile</th>
+                                <th scope="col">Referrer Code</th>
+                                <th scope="col">Referee Username</th>
+                                <th scope="col">Referral Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,18 +64,12 @@ if (isset($_SESSION['user'])) {
                             // Reset counter at the start of each month
                             $counter = 1;
                             ?>
-                            <?php foreach ($monthUsers as $user) : ?>
+                            <?php foreach ($monthReferrals as $referral) : ?>
                                 <tr>
                                     <th scope="row"><?php echo $counter++ ?></th>
-                                    <td><?php echo $user['first_name']; ?></td>
-                                    <td><?php echo $user['last_name']; ?></td>
-                                    <td><?php echo $user['email']; ?></td>
-                                    <td><?php echo date('M d, Y', strtotime($user['date_joined'])); ?></td>
-                                    <td>
-                                        <small>
-                                            <a href="/php_ecommerce/profile.php?id=<?php echo $user['user_id']; ?>" class="btn btn-outline-info">View Profile</a>
-                                        </small>
-                                    </td>
+                                    <td><?php echo $referral['referrer_code']; ?></td>
+                                    <td><?php echo $referral['referee_username']; ?></td>
+                                    <td><?php echo date('M d, Y', strtotime($referral['referral_date'])); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -95,8 +79,9 @@ if (isset($_SESSION['user'])) {
 
 
         <?php else : ?>
-            <p class="mt-3">No orders found in Order history.</p>
+            <p class="mt-3">No completed orders found in your order history.</p>
         <?php endif; ?>
     </div>
 </div>
-<?php include('../partials/footer.php'); ?>
+
+<?php include('./partials/footer.php'); ?>

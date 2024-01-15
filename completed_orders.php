@@ -7,7 +7,7 @@ if (isset($_SESSION['user'])) {
     $userId = $_SESSION['user'][0]['user_id'];
 
     // Fetch all orders of the user from the database
-    $sql = "SELECT * FROM orders WHERE user_id = $userId ORDER BY date_ordered DESC";
+    $sql = "SELECT * FROM orders WHERE user_id = $userId AND status = 'Confirmed' ORDER BY date_ordered DESC";
     $result = mysqli_query($conn, $sql);
     $orders = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
@@ -82,6 +82,12 @@ if (isset($_SESSION['user'])) {
                                         <small class="bg-primary text-light p-1 rounded">
                                             <a href=<?php echo "order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a>
                                         </small>
+                                        <?php
+                                        // Fetch order items for the current order
+                                        $orderItemsSql = "SELECT * FROM order_items WHERE order_id = {$order['order_id']}";
+                                        $orderItemsResult = mysqli_query($conn, $orderItemsSql);
+                                        $orderItems = mysqli_fetch_all($orderItemsResult, MYSQLI_ASSOC);
+                                        ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -92,7 +98,7 @@ if (isset($_SESSION['user'])) {
 
 
         <?php else : ?>
-            <p class="mt-3">No orders found in your order history.</p>
+            <p class="mt-3">No completed orders found in your order history.</p>
         <?php endif; ?>
     </div>
 </div>

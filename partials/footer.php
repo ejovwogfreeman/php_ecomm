@@ -1,17 +1,19 @@
 <?php
 // Check if the form is submitted
-$email = $message = '';
+$subscription_email = $subscription_message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Assuming your form has an input named 'email'
-    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $subscription_email = isset($_POST['subscription_email']) ? trim($_POST['subscription_email']) : '';
 
     // Validate email address
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $message = 'Invalid email address';
+    if (empty($subscription_email)) {
+        $subscription_email = '';
+    } else if (!filter_var($subscription_email, FILTER_VALIDATE_EMAIL)) {
+        $subscription_message = 'Invalid email address';
     } else {
         if ($conn) {
             // Check if the user exists in the users table
-            $userQuery = "SELECT first_name, last_name FROM users WHERE email = '$email'";
+            $userQuery = "SELECT first_name, last_name FROM users WHERE email = '$subscription_email'";
             $userResult = mysqli_query($conn, $userQuery);
 
             if ($userResult) {
@@ -20,47 +22,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $lastName = $userDetails ? $userDetails['last_name'] : ''; // Use ' ' if user doesn't exist
 
                 // Check if the email is already subscribed
-                $checkQuery = "SELECT * FROM newsletters WHERE email = '$email'";
+                $checkQuery = "SELECT * FROM newsletters WHERE email = '$subscription_email'";
                 $checkResult = mysqli_query($conn, $checkQuery);
 
                 if ($checkResult) {
                     if (mysqli_num_rows($checkResult) > 0) {
                         // Email already subscribed
-                        $message = 'Email already subscribed.';
+                        $subscription_message = 'Email already subscribed.';
                     } else {
                         // Email not subscribed, insert into the newsletters table
                         $insertQuery = "INSERT INTO newsletters (email, first_name, last_name, date_subscribed) 
-                                        VALUES ('$email', '$firstName', '$lastName', NOW())";
+                                        VALUES ('$subscription_email', '$firstName', '$lastName', NOW())";
 
                         $insertResult = mysqli_query($conn, $insertQuery);
 
                         if ($insertResult) {
-                            $message = 'Subscription has been done Successfully!';
-                            $email = ''; // Clear email field after successful subscription
+                            $subscription_message = 'Subscription has been done Successfully!';
+                            $subscription_email = ''; // Clear email field after successful subscription
                         } else {
                             // Debugging statement
                             echo "Insert Error: " . mysqli_error($conn);
 
-                            $message = 'Subscription failed. Please try again later.';
+                            $subscription_message = 'Subscription failed. Please try again later.';
                         }
                     }
                 } else {
                     // Debugging statement
                     echo "Check Query Error: " . mysqli_error($conn);
 
-                    $message = 'Error checking subscription status. Please try again later.';
+                    $subscription_message = 'Error checking subscription status. Please try again later.';
                 }
             } else {
                 // Debugging statement
                 echo "User Query Error: " . mysqli_error($conn);
 
-                $message = 'Error checking user status. Please try again later.';
+                $subscription_message = 'Error checking user status. Please try again later.';
             }
 
             // Close the database connection
             mysqli_close($conn);
         } else {
-            $message = 'Error connecting to the database. Please try again later.';
+            $subscription_message = 'Error connecting to the database. Please try again later.';
         }
     }
 }
@@ -120,16 +122,16 @@ $marginTopClass = $isIndexPage && !$isAdminPage ? 'mt-0' : 'mt-4';
             <li><a class="text-light" href=""><i class="bi bi-twitter"></i><span class="ms-2">Twitter</span></a></li>
         </ul>
         <ul class="text-start">
-            <?php if (isset($message) && (strstr($message, "Successfully") || strstr($message, "SUCCESSFUL")) && $message !== '') : ?>
+            <?php if (isset($subscription_message) && (strstr($subscription_message, "Successfully") || strstr($subscription_message, "SUCCESSFUL")) && $subscription_message !== '') : ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><?php echo $message ?></strong>
+                    <strong><?php echo $subscription_message ?></strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true"></span>
                     </button>
                 </div>
-            <?php elseif (isset($message) && $message !== '') : ?>
+            <?php elseif (isset($subscription_message) && $subscription_message !== '') : ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong><?php echo $message ?></strong>
+                    <strong><?php echo $subscription_message ?></strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true"></span>
                     </button>
@@ -141,7 +143,7 @@ $marginTopClass = $isIndexPage && !$isAdminPage ? 'mt-0' : 'mt-4';
                     <span class="input-group-text" id="basic-addon1">
                         <i class="bi bi-envelope"></i>
                     </span>
-                    <input type="text" class="bg-transparent px-2 input" placeholder="example@gmail.com" aria-label="email" name="email" value="<?php echo $email ?>" aria-describedby="basic-addon1" style="border: 1px solid white; color: white;">
+                    <input type="text" class="bg-transparent px-2 input" placeholder="example@gmail.com" aria-label="email" name="subscription_email" value="<?php echo $subscription_email ?>" aria-describedby="basic-addon1" style="border: 1px solid white; color: white;">
                     <button class="btn" type="submit" style="border: 1px solid white; color: white">SUBSCRIBE</button>
                 </div>
             </form>
