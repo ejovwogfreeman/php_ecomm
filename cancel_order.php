@@ -37,7 +37,7 @@ if (isset($_SESSION['user'])) {
                 case 'Pending':
                     // Change status to 'Processing'
                     $sqlUpdateStatus = "UPDATE orders SET status = 'Cancelled' WHERE order_id = $orderId";
-                    $message = 'Order has been cancelled successfully!';
+                    $message = 'Order has been cancelled Successfully!';
                     // Update the order status based on the conditions
                     mysqli_query($conn, $sqlUpdateStatus);
                     redirectWithMessage($message);

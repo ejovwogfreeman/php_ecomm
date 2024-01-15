@@ -82,7 +82,7 @@ if (isset($_SESSION['user'])) {
                                     </td>
                                     <td>
                                         <small class="bg-primary text-light p-1 rounded">
-                                            <a href=<?php echo "order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a>
+                                            <a href=<?php echo "/php_ecommerce/order_details.php?id={$order['order_id']}" ?> class="text-decoration-none text-light">View Order</a>
                                         </small>
                                     </td>
                                 </tr>
