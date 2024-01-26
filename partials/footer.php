@@ -117,9 +117,10 @@ $marginTopClass = $isIndexPage && !$isAdminPage ? 'mt-0' : 'mt-4';
         </ul>
         <ul class="text-start">
             <h5 class="mb-2">Follow Us</h5>
-            <li><a class="text-light" href=""><i class="bi bi-facebook"></i><span class="ms-2">Facebook</span></a></li>
+            <!-- <li><a class="text-light" href=""><i class="bi bi-facebook"></i><span class="ms-2">Facebook</span></a></li> -->
             <li><a class="text-light" href=""><i class="bi bi-instagram"></i><span class="ms-2">Instagram</span></a></li>
             <li><a class="text-light" href=""><i class="bi bi-twitter"></i><span class="ms-2">Twitter</span></a></li>
+            <li><a class="text-light" href=""><i class="bi bi-youtube"></i><span class="ms-2">Youtube</span></a></li>
         </ul>
         <ul class="text-start">
             <?php if (isset($subscription_message) && (strstr($subscription_message, "Successfully") || strstr($subscription_message, "SUCCESSFUL")) && $subscription_message !== '') : ?>
